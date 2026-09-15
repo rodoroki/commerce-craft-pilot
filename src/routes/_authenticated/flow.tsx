@@ -185,7 +185,7 @@ function FlowMap() {
               ? "Daily campaign and store figures."
               : "No acquisition source connected — figures come only from manual entries."
           }
-          state={count(tot.purchases)}
+          state={count(tot.purchases ?? 0)}
           to="/analytics"
         />
         <Node title="Experiments" note="Hypothesis, budget, results and a recorded decision." state={count(experiments.data?.length ?? 0)} to="/experiments" />

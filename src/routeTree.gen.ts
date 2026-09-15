@@ -16,6 +16,7 @@ import { Route as AuthenticatedAiRouteImport } from './routes/_authenticated/ai'
 import { Route as AuthenticatedAnalyticsRouteImport } from './routes/_authenticated/analytics'
 import { Route as AuthenticatedBrandsRouteImport } from './routes/_authenticated/brands'
 import { Route as AuthenticatedCreativesRouteImport } from './routes/_authenticated/creatives'
+import { Route as AuthenticatedFlowRouteImport } from './routes/_authenticated/flow'
 import { Route as AuthenticatedIntegrationsRouteImport } from './routes/_authenticated/integrations'
 import { Route as AuthenticatedKnowledgeRouteImport } from './routes/_authenticated/knowledge'
 import { Route as AuthenticatedLandingRouteImport } from './routes/_authenticated/landing'
@@ -59,6 +60,11 @@ const AuthenticatedBrandsRoute = AuthenticatedBrandsRouteImport.update({
 const AuthenticatedCreativesRoute = AuthenticatedCreativesRouteImport.update({
   id: '/creatives',
   path: '/creatives',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedFlowRoute = AuthenticatedFlowRouteImport.update({
+  id: '/flow',
+  path: '/flow',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedIntegrationsRoute =
@@ -124,6 +130,7 @@ export interface FileRoutesByFullPath {
   '/analytics': typeof AuthenticatedAnalyticsRoute
   '/brands': typeof AuthenticatedBrandsRoute
   '/creatives': typeof AuthenticatedCreativesRoute
+  '/flow': typeof AuthenticatedFlowRoute
   '/integrations': typeof AuthenticatedIntegrationsRoute
   '/knowledge': typeof AuthenticatedKnowledgeRoute
   '/landing': typeof AuthenticatedLandingRoute
@@ -141,6 +148,7 @@ export interface FileRoutesByTo {
   '/analytics': typeof AuthenticatedAnalyticsRoute
   '/brands': typeof AuthenticatedBrandsRoute
   '/creatives': typeof AuthenticatedCreativesRoute
+  '/flow': typeof AuthenticatedFlowRoute
   '/integrations': typeof AuthenticatedIntegrationsRoute
   '/knowledge': typeof AuthenticatedKnowledgeRoute
   '/landing': typeof AuthenticatedLandingRoute
@@ -161,6 +169,7 @@ export interface FileRoutesById {
   '/_authenticated/analytics': typeof AuthenticatedAnalyticsRoute
   '/_authenticated/brands': typeof AuthenticatedBrandsRoute
   '/_authenticated/creatives': typeof AuthenticatedCreativesRoute
+  '/_authenticated/flow': typeof AuthenticatedFlowRoute
   '/_authenticated/integrations': typeof AuthenticatedIntegrationsRoute
   '/_authenticated/knowledge': typeof AuthenticatedKnowledgeRoute
   '/_authenticated/landing': typeof AuthenticatedLandingRoute
@@ -182,6 +191,7 @@ export interface FileRouteTypes {
     | '/analytics'
     | '/brands'
     | '/creatives'
+    | '/flow'
     | '/integrations'
     | '/knowledge'
     | '/landing'
@@ -199,6 +209,7 @@ export interface FileRouteTypes {
     | '/analytics'
     | '/brands'
     | '/creatives'
+    | '/flow'
     | '/integrations'
     | '/knowledge'
     | '/landing'
@@ -218,6 +229,7 @@ export interface FileRouteTypes {
     | '/_authenticated/analytics'
     | '/_authenticated/brands'
     | '/_authenticated/creatives'
+    | '/_authenticated/flow'
     | '/_authenticated/integrations'
     | '/_authenticated/knowledge'
     | '/_authenticated/landing'
@@ -286,6 +298,13 @@ declare module '@tanstack/react-router' {
       path: '/creatives'
       fullPath: '/creatives'
       preLoaderRoute: typeof AuthenticatedCreativesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/flow': {
+      id: '/_authenticated/flow'
+      path: '/flow'
+      fullPath: '/flow'
+      preLoaderRoute: typeof AuthenticatedFlowRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/integrations': {
@@ -366,6 +385,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAnalyticsRoute: typeof AuthenticatedAnalyticsRoute
   AuthenticatedBrandsRoute: typeof AuthenticatedBrandsRoute
   AuthenticatedCreativesRoute: typeof AuthenticatedCreativesRoute
+  AuthenticatedFlowRoute: typeof AuthenticatedFlowRoute
   AuthenticatedIntegrationsRoute: typeof AuthenticatedIntegrationsRoute
   AuthenticatedKnowledgeRoute: typeof AuthenticatedKnowledgeRoute
   AuthenticatedLandingRoute: typeof AuthenticatedLandingRoute
@@ -383,6 +403,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAnalyticsRoute: AuthenticatedAnalyticsRoute,
   AuthenticatedBrandsRoute: AuthenticatedBrandsRoute,
   AuthenticatedCreativesRoute: AuthenticatedCreativesRoute,
+  AuthenticatedFlowRoute: AuthenticatedFlowRoute,
   AuthenticatedIntegrationsRoute: AuthenticatedIntegrationsRoute,
   AuthenticatedKnowledgeRoute: AuthenticatedKnowledgeRoute,
   AuthenticatedLandingRoute: AuthenticatedLandingRoute,
