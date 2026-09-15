@@ -348,7 +348,7 @@ type TableName =
   | "experiment_metrics"
   | "knowledge_entries"
   | "webhook_endpoints"
-  | "integrations";
+  | "integrations"
   | "evidence_items"
   | "intelligence_decisions";
 
