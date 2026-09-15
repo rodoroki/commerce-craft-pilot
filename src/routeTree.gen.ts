@@ -10,26 +10,36 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as StoreRouteRouteImport } from './routes/_store/route'
 import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
-import { Route as AuthenticatedAiRouteImport } from './routes/_authenticated/ai'
-import { Route as AuthenticatedAnalyticsRouteImport } from './routes/_authenticated/analytics'
-import { Route as AuthenticatedBrandsRouteImport } from './routes/_authenticated/brands'
-import { Route as AuthenticatedCreativesRouteImport } from './routes/_authenticated/creatives'
-import { Route as AuthenticatedFlowRouteImport } from './routes/_authenticated/flow'
-import { Route as AuthenticatedIntegrationsRouteImport } from './routes/_authenticated/integrations'
-import { Route as AuthenticatedKnowledgeRouteImport } from './routes/_authenticated/knowledge'
-import { Route as AuthenticatedLandingRouteImport } from './routes/_authenticated/landing'
-import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
-import { Route as AuthenticatedSuppliersRouteImport } from './routes/_authenticated/suppliers'
-import { Route as AuthenticatedExperimentsIndexRouteImport } from './routes/_authenticated/experiments.index'
-import { Route as AuthenticatedExperimentsIdRouteImport } from './routes/_authenticated/experiments.$id'
-import { Route as AuthenticatedProductsIndexRouteImport } from './routes/_authenticated/products.index'
-import { Route as AuthenticatedProductsSlugRouteImport } from './routes/_authenticated/products.$slug'
+import { Route as StoreIndexRouteImport } from './routes/_store/index'
+import { Route as StoreAboutRouteImport } from './routes/_store/about'
+import { Route as StoreFaqRouteImport } from './routes/_store/faq'
+import { Route as StoreHowItWorksRouteImport } from './routes/_store/how-it-works'
+import { Route as StorePoliciesRouteImport } from './routes/_store/policies'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as AuthenticatedAdminAiRouteImport } from './routes/_authenticated/admin.ai'
+import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authenticated/admin.analytics'
+import { Route as AuthenticatedAdminBrandsRouteImport } from './routes/_authenticated/admin.brands'
+import { Route as AuthenticatedAdminCreativesRouteImport } from './routes/_authenticated/admin.creatives'
+import { Route as AuthenticatedAdminFlowRouteImport } from './routes/_authenticated/admin.flow'
+import { Route as AuthenticatedAdminIntegrationsRouteImport } from './routes/_authenticated/admin.integrations'
+import { Route as AuthenticatedAdminKnowledgeRouteImport } from './routes/_authenticated/admin.knowledge'
+import { Route as AuthenticatedAdminLandingRouteImport } from './routes/_authenticated/admin.landing'
+import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin.settings'
+import { Route as AuthenticatedAdminSuppliersRouteImport } from './routes/_authenticated/admin.suppliers'
 import { Route as ApiPublicTrackRouteImport } from './routes/api/public/track'
+import { Route as AuthenticatedAdminExperimentsIndexRouteImport } from './routes/_authenticated/admin.experiments.index'
+import { Route as AuthenticatedAdminExperimentsIdRouteImport } from './routes/_authenticated/admin.experiments.$id'
+import { Route as AuthenticatedAdminProductsIndexRouteImport } from './routes/_authenticated/admin.products.index'
+import { Route as AuthenticatedAdminProductsSlugRouteImport } from './routes/_authenticated/admin.products.$slug'
 
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StoreRouteRoute = StoreRouteRouteImport.update({
+  id: '/_store',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -37,84 +47,92 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
+const StoreIndexRoute = StoreIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => StoreRouteRoute,
+} as any)
+const StoreAboutRoute = StoreAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => StoreRouteRoute,
+} as any)
+const StoreFaqRoute = StoreFaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => StoreRouteRoute,
+} as any)
+const StoreHowItWorksRoute = StoreHowItWorksRouteImport.update({
+  id: '/how-it-works',
+  path: '/how-it-works',
+  getParentRoute: () => StoreRouteRoute,
+} as any)
+const StorePoliciesRoute = StorePoliciesRouteImport.update({
+  id: '/policies',
+  path: '/policies',
+  getParentRoute: () => StoreRouteRoute,
+} as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedAiRoute = AuthenticatedAiRouteImport.update({
-  id: '/ai',
-  path: '/ai',
+const AuthenticatedAdminAiRoute = AuthenticatedAdminAiRouteImport.update({
+  id: '/admin/ai',
+  path: '/admin/ai',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedAnalyticsRoute = AuthenticatedAnalyticsRouteImport.update({
-  id: '/analytics',
-  path: '/analytics',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedBrandsRoute = AuthenticatedBrandsRouteImport.update({
-  id: '/brands',
-  path: '/brands',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedCreativesRoute = AuthenticatedCreativesRouteImport.update({
-  id: '/creatives',
-  path: '/creatives',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedFlowRoute = AuthenticatedFlowRouteImport.update({
-  id: '/flow',
-  path: '/flow',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedIntegrationsRoute =
-  AuthenticatedIntegrationsRouteImport.update({
-    id: '/integrations',
-    path: '/integrations',
+const AuthenticatedAdminAnalyticsRoute =
+  AuthenticatedAdminAnalyticsRouteImport.update({
+    id: '/admin/analytics',
+    path: '/admin/analytics',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedKnowledgeRoute = AuthenticatedKnowledgeRouteImport.update({
-  id: '/knowledge',
-  path: '/knowledge',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedLandingRoute = AuthenticatedLandingRouteImport.update({
-  id: '/landing',
-  path: '/landing',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedSuppliersRoute = AuthenticatedSuppliersRouteImport.update({
-  id: '/suppliers',
-  path: '/suppliers',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedExperimentsIndexRoute =
-  AuthenticatedExperimentsIndexRouteImport.update({
-    id: '/experiments/',
-    path: '/experiments/',
+const AuthenticatedAdminBrandsRoute =
+  AuthenticatedAdminBrandsRouteImport.update({
+    id: '/admin/brands',
+    path: '/admin/brands',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedExperimentsIdRoute =
-  AuthenticatedExperimentsIdRouteImport.update({
-    id: '/experiments/$id',
-    path: '/experiments/$id',
+const AuthenticatedAdminCreativesRoute =
+  AuthenticatedAdminCreativesRouteImport.update({
+    id: '/admin/creatives',
+    path: '/admin/creatives',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedProductsIndexRoute =
-  AuthenticatedProductsIndexRouteImport.update({
-    id: '/products/',
-    path: '/products/',
+const AuthenticatedAdminFlowRoute = AuthenticatedAdminFlowRouteImport.update({
+  id: '/admin/flow',
+  path: '/admin/flow',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAdminIntegrationsRoute =
+  AuthenticatedAdminIntegrationsRouteImport.update({
+    id: '/admin/integrations',
+    path: '/admin/integrations',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedProductsSlugRoute =
-  AuthenticatedProductsSlugRouteImport.update({
-    id: '/products/$slug',
-    path: '/products/$slug',
+const AuthenticatedAdminKnowledgeRoute =
+  AuthenticatedAdminKnowledgeRouteImport.update({
+    id: '/admin/knowledge',
+    path: '/admin/knowledge',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminLandingRoute =
+  AuthenticatedAdminLandingRouteImport.update({
+    id: '/admin/landing',
+    path: '/admin/landing',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminSettingsRoute =
+  AuthenticatedAdminSettingsRouteImport.update({
+    id: '/admin/settings',
+    path: '/admin/settings',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminSuppliersRoute =
+  AuthenticatedAdminSuppliersRouteImport.update({
+    id: '/admin/suppliers',
+    path: '/admin/suppliers',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const ApiPublicTrackRoute = ApiPublicTrackRouteImport.update({
@@ -122,129 +140,186 @@ const ApiPublicTrackRoute = ApiPublicTrackRouteImport.update({
   path: '/api/public/track',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminExperimentsIndexRoute =
+  AuthenticatedAdminExperimentsIndexRouteImport.update({
+    id: '/admin/experiments/',
+    path: '/admin/experiments/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminExperimentsIdRoute =
+  AuthenticatedAdminExperimentsIdRouteImport.update({
+    id: '/admin/experiments/$id',
+    path: '/admin/experiments/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminProductsIndexRoute =
+  AuthenticatedAdminProductsIndexRouteImport.update({
+    id: '/admin/products/',
+    path: '/admin/products/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminProductsSlugRoute =
+  AuthenticatedAdminProductsSlugRouteImport.update({
+    id: '/admin/products/$slug',
+    path: '/admin/products/$slug',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof AuthenticatedIndexRoute
+  '/': typeof StoreIndexRoute
   '/auth': typeof AuthRoute
-  '/ai': typeof AuthenticatedAiRoute
-  '/analytics': typeof AuthenticatedAnalyticsRoute
-  '/brands': typeof AuthenticatedBrandsRoute
-  '/creatives': typeof AuthenticatedCreativesRoute
-  '/flow': typeof AuthenticatedFlowRoute
-  '/integrations': typeof AuthenticatedIntegrationsRoute
-  '/knowledge': typeof AuthenticatedKnowledgeRoute
-  '/landing': typeof AuthenticatedLandingRoute
-  '/settings': typeof AuthenticatedSettingsRoute
-  '/suppliers': typeof AuthenticatedSuppliersRoute
-  '/experiments/$id': typeof AuthenticatedExperimentsIdRoute
-  '/products/$slug': typeof AuthenticatedProductsSlugRoute
+  '/about': typeof StoreAboutRoute
+  '/faq': typeof StoreFaqRoute
+  '/how-it-works': typeof StoreHowItWorksRoute
+  '/policies': typeof StorePoliciesRoute
+  '/admin/ai': typeof AuthenticatedAdminAiRoute
+  '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
+  '/admin/brands': typeof AuthenticatedAdminBrandsRoute
+  '/admin/creatives': typeof AuthenticatedAdminCreativesRoute
+  '/admin/flow': typeof AuthenticatedAdminFlowRoute
+  '/admin/integrations': typeof AuthenticatedAdminIntegrationsRoute
+  '/admin/knowledge': typeof AuthenticatedAdminKnowledgeRoute
+  '/admin/landing': typeof AuthenticatedAdminLandingRoute
+  '/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/admin/suppliers': typeof AuthenticatedAdminSuppliersRoute
   '/api/public/track': typeof ApiPublicTrackRoute
-  '/experiments/': typeof AuthenticatedExperimentsIndexRoute
-  '/products/': typeof AuthenticatedProductsIndexRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/admin/experiments/$id': typeof AuthenticatedAdminExperimentsIdRoute
+  '/admin/products/$slug': typeof AuthenticatedAdminProductsSlugRoute
+  '/admin/experiments/': typeof AuthenticatedAdminExperimentsIndexRoute
+  '/admin/products/': typeof AuthenticatedAdminProductsIndexRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof StoreIndexRoute
   '/auth': typeof AuthRoute
-  '/ai': typeof AuthenticatedAiRoute
-  '/analytics': typeof AuthenticatedAnalyticsRoute
-  '/brands': typeof AuthenticatedBrandsRoute
-  '/creatives': typeof AuthenticatedCreativesRoute
-  '/flow': typeof AuthenticatedFlowRoute
-  '/integrations': typeof AuthenticatedIntegrationsRoute
-  '/knowledge': typeof AuthenticatedKnowledgeRoute
-  '/landing': typeof AuthenticatedLandingRoute
-  '/settings': typeof AuthenticatedSettingsRoute
-  '/suppliers': typeof AuthenticatedSuppliersRoute
-  '/': typeof AuthenticatedIndexRoute
-  '/experiments/$id': typeof AuthenticatedExperimentsIdRoute
-  '/products/$slug': typeof AuthenticatedProductsSlugRoute
+  '/about': typeof StoreAboutRoute
+  '/faq': typeof StoreFaqRoute
+  '/how-it-works': typeof StoreHowItWorksRoute
+  '/policies': typeof StorePoliciesRoute
+  '/admin/ai': typeof AuthenticatedAdminAiRoute
+  '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
+  '/admin/brands': typeof AuthenticatedAdminBrandsRoute
+  '/admin/creatives': typeof AuthenticatedAdminCreativesRoute
+  '/admin/flow': typeof AuthenticatedAdminFlowRoute
+  '/admin/integrations': typeof AuthenticatedAdminIntegrationsRoute
+  '/admin/knowledge': typeof AuthenticatedAdminKnowledgeRoute
+  '/admin/landing': typeof AuthenticatedAdminLandingRoute
+  '/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/admin/suppliers': typeof AuthenticatedAdminSuppliersRoute
   '/api/public/track': typeof ApiPublicTrackRoute
-  '/experiments': typeof AuthenticatedExperimentsIndexRoute
-  '/products': typeof AuthenticatedProductsIndexRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
+  '/admin/experiments/$id': typeof AuthenticatedAdminExperimentsIdRoute
+  '/admin/products/$slug': typeof AuthenticatedAdminProductsSlugRoute
+  '/admin/experiments': typeof AuthenticatedAdminExperimentsIndexRoute
+  '/admin/products': typeof AuthenticatedAdminProductsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/_store': typeof StoreRouteRouteWithChildren
   '/auth': typeof AuthRoute
-  '/_authenticated/ai': typeof AuthenticatedAiRoute
-  '/_authenticated/analytics': typeof AuthenticatedAnalyticsRoute
-  '/_authenticated/brands': typeof AuthenticatedBrandsRoute
-  '/_authenticated/creatives': typeof AuthenticatedCreativesRoute
-  '/_authenticated/flow': typeof AuthenticatedFlowRoute
-  '/_authenticated/integrations': typeof AuthenticatedIntegrationsRoute
-  '/_authenticated/knowledge': typeof AuthenticatedKnowledgeRoute
-  '/_authenticated/landing': typeof AuthenticatedLandingRoute
-  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
-  '/_authenticated/suppliers': typeof AuthenticatedSuppliersRoute
-  '/_authenticated/': typeof AuthenticatedIndexRoute
-  '/_authenticated/experiments/$id': typeof AuthenticatedExperimentsIdRoute
-  '/_authenticated/products/$slug': typeof AuthenticatedProductsSlugRoute
+  '/_store/about': typeof StoreAboutRoute
+  '/_store/faq': typeof StoreFaqRoute
+  '/_store/how-it-works': typeof StoreHowItWorksRoute
+  '/_store/policies': typeof StorePoliciesRoute
+  '/_store/': typeof StoreIndexRoute
+  '/_authenticated/admin/ai': typeof AuthenticatedAdminAiRoute
+  '/_authenticated/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
+  '/_authenticated/admin/brands': typeof AuthenticatedAdminBrandsRoute
+  '/_authenticated/admin/creatives': typeof AuthenticatedAdminCreativesRoute
+  '/_authenticated/admin/flow': typeof AuthenticatedAdminFlowRoute
+  '/_authenticated/admin/integrations': typeof AuthenticatedAdminIntegrationsRoute
+  '/_authenticated/admin/knowledge': typeof AuthenticatedAdminKnowledgeRoute
+  '/_authenticated/admin/landing': typeof AuthenticatedAdminLandingRoute
+  '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/_authenticated/admin/suppliers': typeof AuthenticatedAdminSuppliersRoute
   '/api/public/track': typeof ApiPublicTrackRoute
-  '/_authenticated/experiments/': typeof AuthenticatedExperimentsIndexRoute
-  '/_authenticated/products/': typeof AuthenticatedProductsIndexRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/admin/experiments/$id': typeof AuthenticatedAdminExperimentsIdRoute
+  '/_authenticated/admin/products/$slug': typeof AuthenticatedAdminProductsSlugRoute
+  '/_authenticated/admin/experiments/': typeof AuthenticatedAdminExperimentsIndexRoute
+  '/_authenticated/admin/products/': typeof AuthenticatedAdminProductsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/auth'
-    | '/ai'
-    | '/analytics'
-    | '/brands'
-    | '/creatives'
-    | '/flow'
-    | '/integrations'
-    | '/knowledge'
-    | '/landing'
-    | '/settings'
-    | '/suppliers'
-    | '/experiments/$id'
-    | '/products/$slug'
+    | '/about'
+    | '/faq'
+    | '/how-it-works'
+    | '/policies'
+    | '/admin/ai'
+    | '/admin/analytics'
+    | '/admin/brands'
+    | '/admin/creatives'
+    | '/admin/flow'
+    | '/admin/integrations'
+    | '/admin/knowledge'
+    | '/admin/landing'
+    | '/admin/settings'
+    | '/admin/suppliers'
     | '/api/public/track'
-    | '/experiments/'
-    | '/products/'
+    | '/admin/'
+    | '/admin/experiments/$id'
+    | '/admin/products/$slug'
+    | '/admin/experiments/'
+    | '/admin/products/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/auth'
-    | '/ai'
-    | '/analytics'
-    | '/brands'
-    | '/creatives'
-    | '/flow'
-    | '/integrations'
-    | '/knowledge'
-    | '/landing'
-    | '/settings'
-    | '/suppliers'
     | '/'
-    | '/experiments/$id'
-    | '/products/$slug'
+    | '/auth'
+    | '/about'
+    | '/faq'
+    | '/how-it-works'
+    | '/policies'
+    | '/admin/ai'
+    | '/admin/analytics'
+    | '/admin/brands'
+    | '/admin/creatives'
+    | '/admin/flow'
+    | '/admin/integrations'
+    | '/admin/knowledge'
+    | '/admin/landing'
+    | '/admin/settings'
+    | '/admin/suppliers'
     | '/api/public/track'
-    | '/experiments'
-    | '/products'
+    | '/admin'
+    | '/admin/experiments/$id'
+    | '/admin/products/$slug'
+    | '/admin/experiments'
+    | '/admin/products'
   id:
     | '__root__'
     | '/_authenticated'
+    | '/_store'
     | '/auth'
-    | '/_authenticated/ai'
-    | '/_authenticated/analytics'
-    | '/_authenticated/brands'
-    | '/_authenticated/creatives'
-    | '/_authenticated/flow'
-    | '/_authenticated/integrations'
-    | '/_authenticated/knowledge'
-    | '/_authenticated/landing'
-    | '/_authenticated/settings'
-    | '/_authenticated/suppliers'
-    | '/_authenticated/'
-    | '/_authenticated/experiments/$id'
-    | '/_authenticated/products/$slug'
+    | '/_store/about'
+    | '/_store/faq'
+    | '/_store/how-it-works'
+    | '/_store/policies'
+    | '/_store/'
+    | '/_authenticated/admin/ai'
+    | '/_authenticated/admin/analytics'
+    | '/_authenticated/admin/brands'
+    | '/_authenticated/admin/creatives'
+    | '/_authenticated/admin/flow'
+    | '/_authenticated/admin/integrations'
+    | '/_authenticated/admin/knowledge'
+    | '/_authenticated/admin/landing'
+    | '/_authenticated/admin/settings'
+    | '/_authenticated/admin/suppliers'
     | '/api/public/track'
-    | '/_authenticated/experiments/'
-    | '/_authenticated/products/'
+    | '/_authenticated/admin/'
+    | '/_authenticated/admin/experiments/$id'
+    | '/_authenticated/admin/products/$slug'
+    | '/_authenticated/admin/experiments/'
+    | '/_authenticated/admin/products/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  StoreRouteRoute: typeof StoreRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   ApiPublicTrackRoute: typeof ApiPublicTrackRoute
 }
@@ -258,6 +333,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_store': {
+      id: '/_store'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof StoreRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -265,109 +347,116 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/': {
-      id: '/_authenticated/'
+    '/_store/': {
+      id: '/_store/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof AuthenticatedIndexRouteImport
+      preLoaderRoute: typeof StoreIndexRouteImport
+      parentRoute: typeof StoreRouteRoute
+    }
+    '/_store/about': {
+      id: '/_store/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof StoreAboutRouteImport
+      parentRoute: typeof StoreRouteRoute
+    }
+    '/_store/faq': {
+      id: '/_store/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof StoreFaqRouteImport
+      parentRoute: typeof StoreRouteRoute
+    }
+    '/_store/how-it-works': {
+      id: '/_store/how-it-works'
+      path: '/how-it-works'
+      fullPath: '/how-it-works'
+      preLoaderRoute: typeof StoreHowItWorksRouteImport
+      parentRoute: typeof StoreRouteRoute
+    }
+    '/_store/policies': {
+      id: '/_store/policies'
+      path: '/policies'
+      fullPath: '/policies'
+      preLoaderRoute: typeof StorePoliciesRouteImport
+      parentRoute: typeof StoreRouteRoute
+    }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/ai': {
-      id: '/_authenticated/ai'
-      path: '/ai'
-      fullPath: '/ai'
-      preLoaderRoute: typeof AuthenticatedAiRouteImport
+    '/_authenticated/admin/ai': {
+      id: '/_authenticated/admin/ai'
+      path: '/admin/ai'
+      fullPath: '/admin/ai'
+      preLoaderRoute: typeof AuthenticatedAdminAiRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/analytics': {
-      id: '/_authenticated/analytics'
-      path: '/analytics'
-      fullPath: '/analytics'
-      preLoaderRoute: typeof AuthenticatedAnalyticsRouteImport
+    '/_authenticated/admin/analytics': {
+      id: '/_authenticated/admin/analytics'
+      path: '/admin/analytics'
+      fullPath: '/admin/analytics'
+      preLoaderRoute: typeof AuthenticatedAdminAnalyticsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/brands': {
-      id: '/_authenticated/brands'
-      path: '/brands'
-      fullPath: '/brands'
-      preLoaderRoute: typeof AuthenticatedBrandsRouteImport
+    '/_authenticated/admin/brands': {
+      id: '/_authenticated/admin/brands'
+      path: '/admin/brands'
+      fullPath: '/admin/brands'
+      preLoaderRoute: typeof AuthenticatedAdminBrandsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/creatives': {
-      id: '/_authenticated/creatives'
-      path: '/creatives'
-      fullPath: '/creatives'
-      preLoaderRoute: typeof AuthenticatedCreativesRouteImport
+    '/_authenticated/admin/creatives': {
+      id: '/_authenticated/admin/creatives'
+      path: '/admin/creatives'
+      fullPath: '/admin/creatives'
+      preLoaderRoute: typeof AuthenticatedAdminCreativesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/flow': {
-      id: '/_authenticated/flow'
-      path: '/flow'
-      fullPath: '/flow'
-      preLoaderRoute: typeof AuthenticatedFlowRouteImport
+    '/_authenticated/admin/flow': {
+      id: '/_authenticated/admin/flow'
+      path: '/admin/flow'
+      fullPath: '/admin/flow'
+      preLoaderRoute: typeof AuthenticatedAdminFlowRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/integrations': {
-      id: '/_authenticated/integrations'
-      path: '/integrations'
-      fullPath: '/integrations'
-      preLoaderRoute: typeof AuthenticatedIntegrationsRouteImport
+    '/_authenticated/admin/integrations': {
+      id: '/_authenticated/admin/integrations'
+      path: '/admin/integrations'
+      fullPath: '/admin/integrations'
+      preLoaderRoute: typeof AuthenticatedAdminIntegrationsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/knowledge': {
-      id: '/_authenticated/knowledge'
-      path: '/knowledge'
-      fullPath: '/knowledge'
-      preLoaderRoute: typeof AuthenticatedKnowledgeRouteImport
+    '/_authenticated/admin/knowledge': {
+      id: '/_authenticated/admin/knowledge'
+      path: '/admin/knowledge'
+      fullPath: '/admin/knowledge'
+      preLoaderRoute: typeof AuthenticatedAdminKnowledgeRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/landing': {
-      id: '/_authenticated/landing'
-      path: '/landing'
-      fullPath: '/landing'
-      preLoaderRoute: typeof AuthenticatedLandingRouteImport
+    '/_authenticated/admin/landing': {
+      id: '/_authenticated/admin/landing'
+      path: '/admin/landing'
+      fullPath: '/admin/landing'
+      preLoaderRoute: typeof AuthenticatedAdminLandingRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/settings': {
-      id: '/_authenticated/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+    '/_authenticated/admin/settings': {
+      id: '/_authenticated/admin/settings'
+      path: '/admin/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AuthenticatedAdminSettingsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/suppliers': {
-      id: '/_authenticated/suppliers'
-      path: '/suppliers'
-      fullPath: '/suppliers'
-      preLoaderRoute: typeof AuthenticatedSuppliersRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/experiments/': {
-      id: '/_authenticated/experiments/'
-      path: '/experiments'
-      fullPath: '/experiments/'
-      preLoaderRoute: typeof AuthenticatedExperimentsIndexRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/experiments/$id': {
-      id: '/_authenticated/experiments/$id'
-      path: '/experiments/$id'
-      fullPath: '/experiments/$id'
-      preLoaderRoute: typeof AuthenticatedExperimentsIdRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/products/': {
-      id: '/_authenticated/products/'
-      path: '/products'
-      fullPath: '/products/'
-      preLoaderRoute: typeof AuthenticatedProductsIndexRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/products/$slug': {
-      id: '/_authenticated/products/$slug'
-      path: '/products/$slug'
-      fullPath: '/products/$slug'
-      preLoaderRoute: typeof AuthenticatedProductsSlugRouteImport
+    '/_authenticated/admin/suppliers': {
+      id: '/_authenticated/admin/suppliers'
+      path: '/admin/suppliers'
+      fullPath: '/admin/suppliers'
+      preLoaderRoute: typeof AuthenticatedAdminSuppliersRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/api/public/track': {
@@ -377,50 +466,100 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicTrackRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin/experiments/': {
+      id: '/_authenticated/admin/experiments/'
+      path: '/admin/experiments'
+      fullPath: '/admin/experiments/'
+      preLoaderRoute: typeof AuthenticatedAdminExperimentsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/experiments/$id': {
+      id: '/_authenticated/admin/experiments/$id'
+      path: '/admin/experiments/$id'
+      fullPath: '/admin/experiments/$id'
+      preLoaderRoute: typeof AuthenticatedAdminExperimentsIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/products/': {
+      id: '/_authenticated/admin/products/'
+      path: '/admin/products'
+      fullPath: '/admin/products/'
+      preLoaderRoute: typeof AuthenticatedAdminProductsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/products/$slug': {
+      id: '/_authenticated/admin/products/$slug'
+      path: '/admin/products/$slug'
+      fullPath: '/admin/products/$slug'
+      preLoaderRoute: typeof AuthenticatedAdminProductsSlugRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedAiRoute: typeof AuthenticatedAiRoute
-  AuthenticatedAnalyticsRoute: typeof AuthenticatedAnalyticsRoute
-  AuthenticatedBrandsRoute: typeof AuthenticatedBrandsRoute
-  AuthenticatedCreativesRoute: typeof AuthenticatedCreativesRoute
-  AuthenticatedFlowRoute: typeof AuthenticatedFlowRoute
-  AuthenticatedIntegrationsRoute: typeof AuthenticatedIntegrationsRoute
-  AuthenticatedKnowledgeRoute: typeof AuthenticatedKnowledgeRoute
-  AuthenticatedLandingRoute: typeof AuthenticatedLandingRoute
-  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
-  AuthenticatedSuppliersRoute: typeof AuthenticatedSuppliersRoute
-  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
-  AuthenticatedExperimentsIdRoute: typeof AuthenticatedExperimentsIdRoute
-  AuthenticatedProductsSlugRoute: typeof AuthenticatedProductsSlugRoute
-  AuthenticatedExperimentsIndexRoute: typeof AuthenticatedExperimentsIndexRoute
-  AuthenticatedProductsIndexRoute: typeof AuthenticatedProductsIndexRoute
+  AuthenticatedAdminAiRoute: typeof AuthenticatedAdminAiRoute
+  AuthenticatedAdminAnalyticsRoute: typeof AuthenticatedAdminAnalyticsRoute
+  AuthenticatedAdminBrandsRoute: typeof AuthenticatedAdminBrandsRoute
+  AuthenticatedAdminCreativesRoute: typeof AuthenticatedAdminCreativesRoute
+  AuthenticatedAdminFlowRoute: typeof AuthenticatedAdminFlowRoute
+  AuthenticatedAdminIntegrationsRoute: typeof AuthenticatedAdminIntegrationsRoute
+  AuthenticatedAdminKnowledgeRoute: typeof AuthenticatedAdminKnowledgeRoute
+  AuthenticatedAdminLandingRoute: typeof AuthenticatedAdminLandingRoute
+  AuthenticatedAdminSettingsRoute: typeof AuthenticatedAdminSettingsRoute
+  AuthenticatedAdminSuppliersRoute: typeof AuthenticatedAdminSuppliersRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+  AuthenticatedAdminExperimentsIdRoute: typeof AuthenticatedAdminExperimentsIdRoute
+  AuthenticatedAdminProductsSlugRoute: typeof AuthenticatedAdminProductsSlugRoute
+  AuthenticatedAdminExperimentsIndexRoute: typeof AuthenticatedAdminExperimentsIndexRoute
+  AuthenticatedAdminProductsIndexRoute: typeof AuthenticatedAdminProductsIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedAiRoute: AuthenticatedAiRoute,
-  AuthenticatedAnalyticsRoute: AuthenticatedAnalyticsRoute,
-  AuthenticatedBrandsRoute: AuthenticatedBrandsRoute,
-  AuthenticatedCreativesRoute: AuthenticatedCreativesRoute,
-  AuthenticatedFlowRoute: AuthenticatedFlowRoute,
-  AuthenticatedIntegrationsRoute: AuthenticatedIntegrationsRoute,
-  AuthenticatedKnowledgeRoute: AuthenticatedKnowledgeRoute,
-  AuthenticatedLandingRoute: AuthenticatedLandingRoute,
-  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
-  AuthenticatedSuppliersRoute: AuthenticatedSuppliersRoute,
-  AuthenticatedIndexRoute: AuthenticatedIndexRoute,
-  AuthenticatedExperimentsIdRoute: AuthenticatedExperimentsIdRoute,
-  AuthenticatedProductsSlugRoute: AuthenticatedProductsSlugRoute,
-  AuthenticatedExperimentsIndexRoute: AuthenticatedExperimentsIndexRoute,
-  AuthenticatedProductsIndexRoute: AuthenticatedProductsIndexRoute,
+  AuthenticatedAdminAiRoute: AuthenticatedAdminAiRoute,
+  AuthenticatedAdminAnalyticsRoute: AuthenticatedAdminAnalyticsRoute,
+  AuthenticatedAdminBrandsRoute: AuthenticatedAdminBrandsRoute,
+  AuthenticatedAdminCreativesRoute: AuthenticatedAdminCreativesRoute,
+  AuthenticatedAdminFlowRoute: AuthenticatedAdminFlowRoute,
+  AuthenticatedAdminIntegrationsRoute: AuthenticatedAdminIntegrationsRoute,
+  AuthenticatedAdminKnowledgeRoute: AuthenticatedAdminKnowledgeRoute,
+  AuthenticatedAdminLandingRoute: AuthenticatedAdminLandingRoute,
+  AuthenticatedAdminSettingsRoute: AuthenticatedAdminSettingsRoute,
+  AuthenticatedAdminSuppliersRoute: AuthenticatedAdminSuppliersRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+  AuthenticatedAdminExperimentsIdRoute: AuthenticatedAdminExperimentsIdRoute,
+  AuthenticatedAdminProductsSlugRoute: AuthenticatedAdminProductsSlugRoute,
+  AuthenticatedAdminExperimentsIndexRoute:
+    AuthenticatedAdminExperimentsIndexRoute,
+  AuthenticatedAdminProductsIndexRoute: AuthenticatedAdminProductsIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface StoreRouteRouteChildren {
+  StoreAboutRoute: typeof StoreAboutRoute
+  StoreFaqRoute: typeof StoreFaqRoute
+  StoreHowItWorksRoute: typeof StoreHowItWorksRoute
+  StorePoliciesRoute: typeof StorePoliciesRoute
+  StoreIndexRoute: typeof StoreIndexRoute
+}
+
+const StoreRouteRouteChildren: StoreRouteRouteChildren = {
+  StoreAboutRoute: StoreAboutRoute,
+  StoreFaqRoute: StoreFaqRoute,
+  StoreHowItWorksRoute: StoreHowItWorksRoute,
+  StorePoliciesRoute: StorePoliciesRoute,
+  StoreIndexRoute: StoreIndexRoute,
+}
+
+const StoreRouteRouteWithChildren = StoreRouteRoute._addFileChildren(
+  StoreRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  StoreRouteRoute: StoreRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   ApiPublicTrackRoute: ApiPublicTrackRoute,
 }

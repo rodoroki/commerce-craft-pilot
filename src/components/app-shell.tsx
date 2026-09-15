@@ -7,19 +7,19 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/kit";
 
 const NAV = [
-  { to: "/", key: "nav.command" },
-  { to: "/flow", key: "nav.flow" },
-  { to: "/products", key: "nav.products" },
-  { to: "/brands", key: "nav.brands" },
-  { to: "/suppliers", key: "nav.suppliers" },
-  { to: "/creatives", key: "nav.creatives" },
-  { to: "/landing", key: "nav.landing" },
-  { to: "/experiments", key: "nav.experiments" },
-  { to: "/analytics", key: "nav.analytics" },
-  { to: "/knowledge", key: "nav.knowledge" },
-  { to: "/ai", key: "nav.ai" },
-  { to: "/integrations", key: "nav.integrations" },
-  { to: "/settings", key: "nav.settings" },
+  { to: "/admin", key: "nav.command" },
+  { to: "/admin/flow", key: "nav.flow" },
+  { to: "/admin/products", key: "nav.products" },
+  { to: "/admin/brands", key: "nav.brands" },
+  { to: "/admin/suppliers", key: "nav.suppliers" },
+  { to: "/admin/creatives", key: "nav.creatives" },
+  { to: "/admin/landing", key: "nav.landing" },
+  { to: "/admin/experiments", key: "nav.experiments" },
+  { to: "/admin/analytics", key: "nav.analytics" },
+  { to: "/admin/knowledge", key: "nav.knowledge" },
+  { to: "/admin/ai", key: "nav.ai" },
+  { to: "/admin/integrations", key: "nav.integrations" },
+  { to: "/admin/settings", key: "nav.settings" },
 ] as const;
 
 function useTheme() {
@@ -58,7 +58,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           open ? "translate-x-0" : "-translate-x-full",
         )}
       >
-        <Link to="/" className="block" onClick={() => setOpen(false)}>
+        <Link to="/admin" className="block" onClick={() => setOpen(false)}>
           <div className="display text-lg leading-none">Commerce</div>
           <div className="display text-lg leading-none">Intelligence</div>
           <div className="label-xs mt-2">Engine</div>
@@ -70,7 +70,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               key={item.to}
               to={item.to}
               onClick={() => setOpen(false)}
-              activeOptions={{ exact: item.to === "/" }}
+              activeOptions={{ exact: item.to === "/admin" }}
               className="rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-background hover:text-foreground"
               activeProps={{ className: "bg-background text-foreground font-medium" }}
             >
