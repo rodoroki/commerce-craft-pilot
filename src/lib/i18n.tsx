@@ -96,7 +96,18 @@ const en: Dict = {
   "auth.google": "Continue with Google",
   "save": "Save",
   "cancel": "Cancel",
-  "phase.note": "Phase 1 — foundation. Later phases are not built yet.",
+  "phase.note": "Evidence-led view of opportunities, capital, decisions and learning.",
+  "intelligence.opportunity": "Opportunity intelligence",
+  "intelligence.why": "Why",
+  "intelligence.risks": "Risks",
+  "intelligence.unknowns": "Unknown",
+  "intelligence.evidence": "Evidence",
+  "intelligence.nextAction": "Next best action",
+  "intelligence.capital": "Capital at risk",
+  "intelligence.changed": "What changed",
+  "intelligence.blocking": "What is blocking",
+  "intelligence.learning": "Learning",
+  "intelligence.decision": "Decision forming",
 };
 
 const pt: Dict = {
@@ -184,7 +195,18 @@ const pt: Dict = {
   "auth.google": "Continuar com Google",
   "save": "Salvar",
   "cancel": "Cancelar",
-  "phase.note": "Fase 1 — fundação. Fases seguintes ainda não construídas.",
+  "phase.note": "Visão orientada por evidências de oportunidades, capital, decisões e aprendizado.",
+  "intelligence.opportunity": "Inteligência da oportunidade",
+  "intelligence.why": "Por quê",
+  "intelligence.risks": "Riscos",
+  "intelligence.unknowns": "Desconhecido",
+  "intelligence.evidence": "Evidência",
+  "intelligence.nextAction": "Próxima melhor ação",
+  "intelligence.capital": "Capital em risco",
+  "intelligence.changed": "O que mudou",
+  "intelligence.blocking": "O que está bloqueando",
+  "intelligence.learning": "Aprendizado",
+  "intelligence.decision": "Decisão se formando",
 };
 
 const dictionaries: Record<Locale, Dict> = { "en-US": en, "pt-BR": pt, "es-ES": en };

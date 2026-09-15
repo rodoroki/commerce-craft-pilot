@@ -110,3 +110,17 @@ export function DataFlag({
     </Badge>
   );
 }
+
+export function ConfidenceBadge({ level }: { level: "VERIFIED" | "HIGH" | "MEDIUM" | "LOW" | "UNVERIFIED" }) {
+  const tone = level === "VERIFIED" || level === "HIGH" ? "success" : level === "MEDIUM" ? "accent" : "neutral";
+  return <Badge tone={tone}>{level.replace(/_/g, " ")}</Badge>;
+}
+
+export function ProvenanceLine({ source, timestamp, status }: { source: string; timestamp?: string | null; status: string }) {
+  return (
+    <div className="mt-2 text-xs text-muted-foreground">
+      {source} · {status.replace(/_/g, " ")}
+      {timestamp ? ` · ${new Date(timestamp).toLocaleDateString()}` : ""}
+    </div>
+  );
+}
