@@ -17,7 +17,7 @@ import {
 } from "@/lib/queries";
 import { totals } from "@/lib/analytics";
 
-export const Route = createFileRoute("/_authenticated/flow")({
+export const Route = createFileRoute("/_authenticated/admin/flow")({
   head: () => ({
     meta: [
       { title: "Operating Flow — Commerce Intelligence Engine" },
@@ -125,7 +125,7 @@ function FlowMap() {
           title="Product signals"
           note="Product ideas registered in the Product Lab."
           state={count(prods.length)}
-          to="/products"
+          to="/admin/products"
         />
         <Node
           title="Opportunity AI"
@@ -140,19 +140,19 @@ function FlowMap() {
           title="Source"
           note="Supplier candidates per product, compared on landed cost, delivery and branding."
           state={count(suppliers.data?.length ?? 0)}
-          to="/suppliers"
+          to="/admin/suppliers"
         />
         <Node
           title="Landed cost"
           note="Products with a confirmed cost base. Without it no margin or ranking is shown."
           state={count(sourcedProducts)}
-          to="/products"
+          to="/admin/products"
         />
         <Node
           title="Evaluate"
           note="Products scored on the 12 criteria."
           state={count(evaluated)}
-          to="/products"
+          to="/admin/products"
         />
       </Rail>
 
@@ -188,15 +188,15 @@ function FlowMap() {
           state={count(tot.purchases ?? 0)}
           to="/analytics"
         />
-        <Node title="Experiments" note="Hypothesis, budget, results and a recorded decision." state={count(experiments.data?.length ?? 0)} to="/experiments" />
+        <Node title="Experiments" note="Hypothesis, budget, results and a recorded decision." state={count(experiments.data?.length ?? 0)} to="/admin/experiments" />
       </Rail>
 
       <Rail label={t("flow.learnDecide")}>
         <Node title="Learning AI" note="Consolidates a lesson only with enough repeated observations." state={count(knowledge.data?.length ?? 0)} to="/knowledge" />
-        <Node title="Decision AI" note="Recommends continue, scale, rework, change or kill — always with the reasons behind it." state={count(experiments.data?.filter((e) => e.decision).length ?? 0)} to="/experiments" />
-        <Node title="Kill" note="Products retired after a decision." state={count(killed)} to="/products" />
-        <Node title="Validated" note="Products with proven demand and economics." state={count(validated)} to="/products" />
-        <Node title="Scale" note="Products in active scaling." state={count(scaled)} to="/products" />
+        <Node title="Decision AI" note="Recommends continue, scale, rework, change or kill — always with the reasons behind it." state={count(experiments.data?.filter((e) => e.decision).length ?? 0)} to="/admin/experiments" />
+        <Node title="Kill" note="Products retired after a decision." state={count(killed)} to="/admin/products" />
+        <Node title="Validated" note="Products with proven demand and economics." state={count(validated)} to="/admin/products" />
+        <Node title="Scale" note="Products in active scaling." state={count(scaled)} to="/admin/products" />
         <Node title="Private label · 3PL · Global" note="Prepared next stage. Opens once a product is scaling with confirmed economics." state={configured(false)} />
       </Rail>
     </div>

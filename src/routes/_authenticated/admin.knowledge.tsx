@@ -16,7 +16,7 @@ import {
 } from "@/lib/queries";
 import { learningStatus } from "@/lib/intelligence";
 
-export const Route = createFileRoute("/_authenticated/knowledge")({
+export const Route = createFileRoute("/_authenticated/admin/knowledge")({
   head: () => ({
     meta: [
       { title: "Knowledge Base — Commerce Intelligence Engine" },

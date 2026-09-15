@@ -18,7 +18,7 @@ import {
   type Creative,
 } from "@/lib/queries";
 
-export const Route = createFileRoute("/_authenticated/creatives")({
+export const Route = createFileRoute("/_authenticated/admin/creatives")({
   head: () => ({
     meta: [
       { title: "Creative Lab — Commerce Intelligence Engine" },

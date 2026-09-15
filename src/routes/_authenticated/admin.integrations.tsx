@@ -7,7 +7,7 @@ import { Badge, Button, Card, DataFlag, Input, SectionTitle } from "@/components
 import { useI18n } from "@/lib/i18n";
 import { integrationsQuery, useSaveRecord, webhooksQuery } from "@/lib/queries";
 
-export const Route = createFileRoute("/_authenticated/integrations")({
+export const Route = createFileRoute("/_authenticated/admin/integrations")({
   head: () => ({
     meta: [
       { title: "Integrations — Commerce Intelligence Engine" },

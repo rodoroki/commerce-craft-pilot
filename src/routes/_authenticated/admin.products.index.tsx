@@ -14,7 +14,7 @@ import {
   useSaveRecord,
 } from "@/lib/queries";
 
-export const Route = createFileRoute("/_authenticated/products/")({
+export const Route = createFileRoute("/_authenticated/admin/products/")({
   head: () => ({
     meta: [
       { title: "Product Lab — Commerce Intelligence Engine" },
@@ -97,7 +97,7 @@ function ProductsPage() {
       ) : (
         <div className="grid gap-4 sm:grid-cols-2">
           {(data ?? []).map((p) => (
-            <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }}>
+            <Link key={p.id} to="/admin/products/$slug" params={{ slug: p.slug }}>
               <Card className="h-full p-5 transition-colors hover:border-accent/40">
                 <div className="flex items-start justify-between gap-3">
                   <div>

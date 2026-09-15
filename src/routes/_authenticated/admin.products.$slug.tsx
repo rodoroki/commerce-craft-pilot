@@ -18,7 +18,7 @@ import {
 import { computeEconomics, formatMoney } from "@/lib/economics";
 import { compareSources, interpretOpportunity, nextBestAction } from "@/lib/intelligence";
 
-export const Route = createFileRoute("/_authenticated/products/$slug")({
+export const Route = createFileRoute("/_authenticated/admin/products/$slug")({
   head: () => ({
     meta: [
       { title: "Product detail — Commerce Intelligence Engine" },
@@ -278,7 +278,7 @@ function ProductDetail() {
         }
       />
       <div className="label-xs -mt-10">
-        <Link to="/products" className="hover:text-foreground">
+        <Link to="/admin/products" className="hover:text-foreground">
           ← {t("products.title")}
         </Link>
         {product.brands ? ` · ${product.brands.name}™` : ""}
@@ -552,7 +552,7 @@ function ProductDetail() {
               {experiments.map((e) => (
                 <li key={e.id}>
                   <Link
-                    to="/experiments/$id"
+                    to="/admin/experiments/$id"
                     params={{ id: e.id }}
                     className="hover:text-foreground"
                   >

@@ -3,7 +3,7 @@ import { PageHeader } from "@/components/app-shell";
 import { Card, Field } from "@/components/ui/kit";
 import { useI18n, type Locale } from "@/lib/i18n";
 
-export const Route = createFileRoute("/_authenticated/settings")({
+export const Route = createFileRoute("/_authenticated/admin/settings")({
   head: () => ({
     meta: [
       { title: "Settings — Commerce Intelligence Engine" },

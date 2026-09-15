@@ -8,7 +8,7 @@ import { Grid2, Modal, NumberInput, Select, Textarea } from "@/components/ui/for
 import { useI18n } from "@/lib/i18n";
 import { suppliersQuery, useSaveRecord, type Supplier } from "@/lib/queries";
 
-export const Route = createFileRoute("/_authenticated/suppliers")({
+export const Route = createFileRoute("/_authenticated/admin/suppliers")({
   head: () => ({
     meta: [
       { title: "Supplier Lab — Commerce Intelligence Engine" },

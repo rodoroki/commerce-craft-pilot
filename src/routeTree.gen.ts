@@ -14,6 +14,7 @@ import { Route as StoreRouteRouteImport } from './routes/_store/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as StoreIndexRouteImport } from './routes/_store/index'
 import { Route as StoreAboutRouteImport } from './routes/_store/about'
+import { Route as StoreCartRouteImport } from './routes/_store/cart'
 import { Route as StoreFaqRouteImport } from './routes/_store/faq'
 import { Route as StoreHowItWorksRouteImport } from './routes/_store/how-it-works'
 import { Route as StorePoliciesRouteImport } from './routes/_store/policies'
@@ -28,6 +29,7 @@ import { Route as AuthenticatedAdminKnowledgeRouteImport } from './routes/_authe
 import { Route as AuthenticatedAdminLandingRouteImport } from './routes/_authenticated/admin.landing'
 import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin.settings'
 import { Route as AuthenticatedAdminSuppliersRouteImport } from './routes/_authenticated/admin.suppliers'
+import { Route as StoreProductSlugRouteImport } from './routes/_store/product.$slug'
 import { Route as ApiPublicTrackRouteImport } from './routes/api/public/track'
 import { Route as AuthenticatedAdminExperimentsIndexRouteImport } from './routes/_authenticated/admin.experiments.index'
 import { Route as AuthenticatedAdminExperimentsIdRouteImport } from './routes/_authenticated/admin.experiments.$id'
@@ -55,6 +57,11 @@ const StoreIndexRoute = StoreIndexRouteImport.update({
 const StoreAboutRoute = StoreAboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => StoreRouteRoute,
+} as any)
+const StoreCartRoute = StoreCartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
   getParentRoute: () => StoreRouteRoute,
 } as any)
 const StoreFaqRoute = StoreFaqRouteImport.update({
@@ -135,6 +142,11 @@ const AuthenticatedAdminSuppliersRoute =
     path: '/admin/suppliers',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const StoreProductSlugRoute = StoreProductSlugRouteImport.update({
+  id: '/product/$slug',
+  path: '/product/$slug',
+  getParentRoute: () => StoreRouteRoute,
+} as any)
 const ApiPublicTrackRoute = ApiPublicTrackRouteImport.update({
   id: '/api/public/track',
   path: '/api/public/track',
@@ -169,6 +181,7 @@ export interface FileRoutesByFullPath {
   '/': typeof StoreIndexRoute
   '/auth': typeof AuthRoute
   '/about': typeof StoreAboutRoute
+  '/cart': typeof StoreCartRoute
   '/faq': typeof StoreFaqRoute
   '/how-it-works': typeof StoreHowItWorksRoute
   '/policies': typeof StorePoliciesRoute
@@ -182,6 +195,7 @@ export interface FileRoutesByFullPath {
   '/admin/landing': typeof AuthenticatedAdminLandingRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/admin/suppliers': typeof AuthenticatedAdminSuppliersRoute
+  '/product/$slug': typeof StoreProductSlugRoute
   '/api/public/track': typeof ApiPublicTrackRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/admin/experiments/$id': typeof AuthenticatedAdminExperimentsIdRoute
@@ -193,6 +207,7 @@ export interface FileRoutesByTo {
   '/': typeof StoreIndexRoute
   '/auth': typeof AuthRoute
   '/about': typeof StoreAboutRoute
+  '/cart': typeof StoreCartRoute
   '/faq': typeof StoreFaqRoute
   '/how-it-works': typeof StoreHowItWorksRoute
   '/policies': typeof StorePoliciesRoute
@@ -206,6 +221,7 @@ export interface FileRoutesByTo {
   '/admin/landing': typeof AuthenticatedAdminLandingRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/admin/suppliers': typeof AuthenticatedAdminSuppliersRoute
+  '/product/$slug': typeof StoreProductSlugRoute
   '/api/public/track': typeof ApiPublicTrackRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/admin/experiments/$id': typeof AuthenticatedAdminExperimentsIdRoute
@@ -219,6 +235,7 @@ export interface FileRoutesById {
   '/_store': typeof StoreRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/_store/about': typeof StoreAboutRoute
+  '/_store/cart': typeof StoreCartRoute
   '/_store/faq': typeof StoreFaqRoute
   '/_store/how-it-works': typeof StoreHowItWorksRoute
   '/_store/policies': typeof StorePoliciesRoute
@@ -233,6 +250,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/landing': typeof AuthenticatedAdminLandingRoute
   '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/_authenticated/admin/suppliers': typeof AuthenticatedAdminSuppliersRoute
+  '/_store/product/$slug': typeof StoreProductSlugRoute
   '/api/public/track': typeof ApiPublicTrackRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/admin/experiments/$id': typeof AuthenticatedAdminExperimentsIdRoute
@@ -246,6 +264,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/about'
+    | '/cart'
     | '/faq'
     | '/how-it-works'
     | '/policies'
@@ -259,6 +278,7 @@ export interface FileRouteTypes {
     | '/admin/landing'
     | '/admin/settings'
     | '/admin/suppliers'
+    | '/product/$slug'
     | '/api/public/track'
     | '/admin/'
     | '/admin/experiments/$id'
@@ -270,6 +290,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/about'
+    | '/cart'
     | '/faq'
     | '/how-it-works'
     | '/policies'
@@ -283,6 +304,7 @@ export interface FileRouteTypes {
     | '/admin/landing'
     | '/admin/settings'
     | '/admin/suppliers'
+    | '/product/$slug'
     | '/api/public/track'
     | '/admin'
     | '/admin/experiments/$id'
@@ -295,6 +317,7 @@ export interface FileRouteTypes {
     | '/_store'
     | '/auth'
     | '/_store/about'
+    | '/_store/cart'
     | '/_store/faq'
     | '/_store/how-it-works'
     | '/_store/policies'
@@ -309,6 +332,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/landing'
     | '/_authenticated/admin/settings'
     | '/_authenticated/admin/suppliers'
+    | '/_store/product/$slug'
     | '/api/public/track'
     | '/_authenticated/admin/'
     | '/_authenticated/admin/experiments/$id'
@@ -359,6 +383,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof StoreAboutRouteImport
+      parentRoute: typeof StoreRouteRoute
+    }
+    '/_store/cart': {
+      id: '/_store/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof StoreCartRouteImport
       parentRoute: typeof StoreRouteRoute
     }
     '/_store/faq': {
@@ -459,6 +490,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminSuppliersRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_store/product/$slug': {
+      id: '/_store/product/$slug'
+      path: '/product/$slug'
+      fullPath: '/product/$slug'
+      preLoaderRoute: typeof StoreProductSlugRouteImport
+      parentRoute: typeof StoreRouteRoute
+    }
     '/api/public/track': {
       id: '/api/public/track'
       path: '/api/public/track'
@@ -539,18 +577,22 @@ const AuthenticatedRouteRouteWithChildren =
 
 interface StoreRouteRouteChildren {
   StoreAboutRoute: typeof StoreAboutRoute
+  StoreCartRoute: typeof StoreCartRoute
   StoreFaqRoute: typeof StoreFaqRoute
   StoreHowItWorksRoute: typeof StoreHowItWorksRoute
   StorePoliciesRoute: typeof StorePoliciesRoute
   StoreIndexRoute: typeof StoreIndexRoute
+  StoreProductSlugRoute: typeof StoreProductSlugRoute
 }
 
 const StoreRouteRouteChildren: StoreRouteRouteChildren = {
   StoreAboutRoute: StoreAboutRoute,
+  StoreCartRoute: StoreCartRoute,
   StoreFaqRoute: StoreFaqRoute,
   StoreHowItWorksRoute: StoreHowItWorksRoute,
   StorePoliciesRoute: StorePoliciesRoute,
   StoreIndexRoute: StoreIndexRoute,
+  StoreProductSlugRoute: StoreProductSlugRoute,
 }
 
 const StoreRouteRouteWithChildren = StoreRouteRoute._addFileChildren(
