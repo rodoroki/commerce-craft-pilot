@@ -76,7 +76,7 @@ export function interpretOpportunity(
       claim: "No supplier data has been verified",
       source: "Supplier candidates",
       timestamp: null,
-      status: "UNVERIFIED",
+      status: "UNKNOWN",
       confidence: "UNVERIFIED",
     });
   }
