@@ -7,4 +7,4 @@
 - [x] Formal experiment decisions
 - [x] Learning lifecycle and history
 - [x] Context-aware AI preparation
-- [x] Browser validation
+- [ ] Browser validation — blocked by unavailable authenticated preview session
