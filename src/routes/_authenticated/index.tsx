@@ -124,6 +124,26 @@ function CommandCenter() {
             ))}
           </div>
         )}
+        <div className="grid gap-3 sm:grid-cols-2">
+          <Link to="/experiments" className="block">
+            <Card className="p-4 transition-colors hover:bg-surface">
+              <div className="label-xs">Experiments without a decision</div>
+              <div className="numeral mt-2 text-2xl">{thinExperiments.length}</div>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Running tests still below the data threshold for a verdict.
+              </p>
+            </Card>
+          </Link>
+          <Link to="/suppliers" className="block">
+            <Card className="p-4 transition-colors hover:bg-surface">
+              <div className="label-xs">Suppliers without a reliability score</div>
+              <div className="numeral mt-2 text-2xl">{unratedSuppliers.length}</div>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Sourcing decisions stay blocked until these are rated.
+              </p>
+            </Card>
+          </Link>
+        </div>
       </section>
     </div>
   );
