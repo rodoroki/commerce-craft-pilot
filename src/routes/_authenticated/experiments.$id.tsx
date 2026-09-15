@@ -3,11 +3,13 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/app-shell";
-import { Badge, Button, Card, DataFlag, Field, Input, SectionTitle } from "@/components/ui/kit";
+import { Badge, Button, Card, ConfidenceBadge, DataFlag, Field, Input, SectionTitle } from "@/components/ui/kit";
 import { Grid2, Modal, NumberInput, Select, Textarea } from "@/components/ui/form";
 import { useI18n } from "@/lib/i18n";
 import { EXPERIMENT_STATUSES, experimentDetailQuery, useSaveRecord } from "@/lib/queries";
 import { decide, derive, fmtNum, fmtPct, totals } from "@/lib/analytics";
+import { computeEconomics } from "@/lib/economics";
+import { formalDecision } from "@/lib/intelligence";
 
 export const Route = createFileRoute("/_authenticated/experiments/$id")({
   head: () => ({
@@ -47,6 +49,7 @@ function ExperimentDetail() {
   const { data, isLoading } = useQuery(experimentDetailQuery(id));
   const saveMetric = useSaveRecord("experiment_metrics");
   const saveExperiment = useSaveRecord("experiments");
+  const saveDecision = useSaveRecord("intelligence_decisions");
   const [open, setOpen] = useState(false);
   const [row, setRow] = useState(emptyRow);
 
@@ -57,6 +60,17 @@ function ExperimentDetail() {
   const tot = totals(metrics);
   const der = derive(tot);
   const decision = decide({ t: tot, d: der, product: experiment.products });
+  const economics = experiment.products ? computeEconomics({
+    suggested_price: experiment.products.suggested_price,
+    product_cost: experiment.products.product_cost,
+    shipping_cost: experiment.products.shipping_cost,
+    fulfillment_cost: experiment.products.fulfillment_cost,
+    payment_fee_pct: experiment.products.payment_fee_pct,
+    platform_fee_pct: experiment.products.platform_fee_pct,
+    refund_allowance_pct: experiment.products.refund_allowance_pct,
+    estimated_cac: der.cac,
+  }) : null;
+  const formal = formalDecision(decision.verdict, decision.reasons, metrics, economics?.complete ?? false);
 
   const addRow = () => {
     saveMetric.mutate(
@@ -132,9 +146,12 @@ function ExperimentDetail() {
       <section className="space-y-4">
         <SectionTitle aside={`${metrics.length} recorded day(s)`}>Decision</SectionTitle>
         <Card className="p-6">
-          <Badge tone={decision.verdict === "SCALE" ? "success" : "accent"}>
-            {decision.verdict.replace(/_/g, " ")}
+          <div className="flex flex-wrap items-center gap-2">
+          <Badge tone={formal.decision === "SCALE" ? "success" : "accent"}>
+            {formal.decision.replace(/_/g, " ")}
           </Badge>
+          <ConfidenceBadge level={formal.confidence} />
+          </div>
           <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
             {decision.reasons.map((r) => (
               <li key={r}>— {r}</li>
@@ -149,15 +166,31 @@ function ExperimentDetail() {
               ))}
             </div>
           ) : null}
+          <div className="mt-6 grid gap-5 border-t border-border pt-5 sm:grid-cols-2 lg:grid-cols-4">
+            <div><div className="label-xs">Evidence</div><ul className="mt-2 space-y-1 text-sm text-muted-foreground">{formal.evidence.map((item) => <li key={item}>— {item}</li>)}</ul></div>
+            <div><div className="label-xs">Unknown</div><p className="mt-2 text-sm text-muted-foreground">{formal.unknowns.join(", ") || "No material unknowns detected"}</p></div>
+            <div><div className="label-xs">Risk</div><p className="mt-2 text-sm text-muted-foreground">{formal.risk}</p></div>
+            <div><div className="label-xs">Next action</div><p className="mt-2 text-sm text-muted-foreground">{formal.nextAction}</p></div>
+          </div>
           <div className="mt-6">
             <Button
               size="sm"
               variant="outline"
               onClick={() =>
-                saveExperiment.mutate(
-                  { id, values: { decision: decision.verdict } },
-                  { onSuccess: () => toast.success("Decision saved to the experiment.") },
-                )
+                saveDecision.mutate({ values: {
+                  experiment_id: id,
+                  product_id: experiment.product_id,
+                  decision: formal.decision,
+                  why: formal.why,
+                  evidence_snapshot: formal.evidence,
+                  unknowns: formal.unknowns,
+                  risk: formal.risk,
+                  next_action: formal.nextAction,
+                  confidence: formal.confidence,
+                } }, { onSuccess: () => {
+                  saveExperiment.mutate({ id, values: { decision: formal.decision } });
+                  toast.success("Decision and evidence snapshot saved.");
+                }, onError: (error) => toast.error(error.message) })
               }
             >
               Save this decision
