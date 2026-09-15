@@ -74,12 +74,16 @@ function CommandCenter() {
         <SectionTitle aside={!commerceConnected ? <DataFlag kind="NOT_CONFIGURED" /> : undefined}>
           {t("command.business")}
         </SectionTitle>
-        <p className="text-sm text-muted-foreground">{t("command.noBusinessData")}</p>
+        {!commerceConnected ? (
+          <p className="text-sm text-muted-foreground">{t("command.noBusinessData")}</p>
+        ) : null}
         <div className="grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-4">
-          {BUSINESS.map((key) => (
-            <div key={key} className="bg-card p-4">
-              <div className="label-xs">{t(key)}</div>
-              <div className="numeral mt-2 text-sm text-muted-foreground">{t("state.noData")}</div>
+          {business.map(([label, value]) => (
+            <div key={label} className="bg-card p-4">
+              <div className="label-xs">{label}</div>
+              <div className="numeral mt-2 text-sm">
+                {value ?? <span className="text-muted-foreground">{t("state.noData")}</span>}
+              </div>
             </div>
           ))}
         </div>
