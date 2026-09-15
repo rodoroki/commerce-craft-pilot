@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/kit";
 
 const NAV = [
-  { to: "/command", key: "nav.command" },
+  { to: "/", key: "nav.command" },
   { to: "/products", key: "nav.products" },
   { to: "/brands", key: "nav.brands" },
   { to: "/suppliers", key: "nav.suppliers" },
@@ -51,7 +51,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           open ? "translate-x-0" : "-translate-x-full",
         )}
       >
-        <Link to="/command" className="block" onClick={() => setOpen(false)}>
+        <Link to="/" className="block" onClick={() => setOpen(false)}>
           <div className="display text-lg leading-none">Commerce</div>
           <div className="display text-lg leading-none">Intelligence</div>
           <div className="label-xs mt-2">Engine</div>
