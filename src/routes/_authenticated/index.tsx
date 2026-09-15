@@ -3,7 +3,15 @@ import { useQuery } from "@tanstack/react-query";
 import { PageHeader } from "@/components/app-shell";
 import { Badge, Card, DataFlag, SectionTitle } from "@/components/ui/kit";
 import { useI18n } from "@/lib/i18n";
-import { integrationsQuery, productsQuery, PRODUCT_STAGES } from "@/lib/queries";
+import {
+  allMetricsQuery,
+  experimentsQuery,
+  integrationsQuery,
+  productsQuery,
+  suppliersQuery,
+  PRODUCT_STAGES,
+} from "@/lib/queries";
+import { derive, fmtNum, fmtPct, totals } from "@/lib/analytics";
 
 export const Route = createFileRoute("/_authenticated/")({
   head: () => ({
