@@ -1,171 +1,100 @@
-import * as React from "react";
-import * as LabelPrimitive from "@radix-ui/react-label";
-import { Slot } from "@radix-ui/react-slot";
-import {
-  Controller,
-  FormProvider,
-  useFormContext,
-  type ControllerProps,
-  type FieldPath,
-  type FieldValues,
-} from "react-hook-form";
-
+import type {
+  InputHTMLAttributes,
+  ReactNode,
+  SelectHTMLAttributes,
+  TextareaHTMLAttributes,
+} from "react";
+import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/kit";
 
-const Form = FormProvider;
+export function Textarea({ className, ...props }: TextareaHTMLAttributes<HTMLTextAreaElement>) {
+  return (
+    <textarea
+      className={cn(
+        "min-h-24 w-full rounded-md border border-input bg-card p-3 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
 
-type FormFieldContextValue<
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> = {
-  name: TName;
-};
+export function Select({ className, ...props }: SelectHTMLAttributes<HTMLSelectElement>) {
+  return (
+    <select
+      className={cn(
+        "h-10 w-full rounded-md border border-input bg-card px-3 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
 
-const FormFieldContext = React.createContext<FormFieldContextValue | null>(null);
-
-const FormField = <
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
->({
+/** Numeric input that reports null for an empty value — never a silent zero. */
+export function NumberInput({
+  value,
+  onValue,
   ...props
-}: ControllerProps<TFieldValues, TName>) => {
+}: Omit<InputHTMLAttributes<HTMLInputElement>, "value" | "onChange"> & {
+  value: number | null;
+  onValue: (v: number | null) => void;
+}) {
   return (
-    <FormFieldContext.Provider value={{ name: props.name }}>
-      <Controller {...props} />
-    </FormFieldContext.Provider>
-  );
-};
-
-const useFormField = () => {
-  const fieldContext = React.useContext(FormFieldContext);
-  const itemContext = React.useContext(FormItemContext);
-  const { getFieldState, formState } = useFormContext();
-
-  if (!fieldContext) {
-    throw new Error("useFormField should be used within <FormField>");
-  }
-
-  if (!itemContext) {
-    throw new Error("useFormField should be used within <FormItem>");
-  }
-
-  const fieldState = getFieldState(fieldContext.name, formState);
-
-  const { id } = itemContext;
-
-  return {
-    id,
-    name: fieldContext.name,
-    formItemId: `${id}-form-item`,
-    formDescriptionId: `${id}-form-item-description`,
-    formMessageId: `${id}-form-item-message`,
-    ...fieldState,
-  };
-};
-
-type FormItemContextValue = {
-  id: string;
-};
-
-const FormItemContext = React.createContext<FormItemContextValue | null>(null);
-
-const FormItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => {
-    const id = React.useId();
-
-    return (
-      <FormItemContext.Provider value={{ id }}>
-        <div ref={ref} className={cn("space-y-2", className)} {...props} />
-      </FormItemContext.Provider>
-    );
-  },
-);
-FormItem.displayName = "FormItem";
-
-const FormLabel = React.forwardRef<
-  React.ElementRef<typeof LabelPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
->(({ className, ...props }, ref) => {
-  const { error, formItemId } = useFormField();
-
-  return (
-    <Label
-      ref={ref}
-      className={cn(error && "text-destructive", className)}
-      htmlFor={formItemId}
+    <input
+      type="number"
+      inputMode="decimal"
+      value={value === null ? "" : String(value)}
+      onChange={(e) => {
+        const raw = e.target.value;
+        onValue(raw === "" ? null : Number(raw));
+      }}
+      className="numeral h-10 w-full rounded-md border border-input bg-card px-3 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      placeholder="—"
       {...props}
     />
   );
-});
-FormLabel.displayName = "FormLabel";
+}
 
-const FormControl = React.forwardRef<
-  React.ElementRef<typeof Slot>,
-  React.ComponentPropsWithoutRef<typeof Slot>
->(({ ...props }, ref) => {
-  const { error, formItemId, formDescriptionId, formMessageId } = useFormField();
-
+export function Modal({
+  open,
+  onClose,
+  title,
+  children,
+  footer,
+}: {
+  open: boolean;
+  onClose: () => void;
+  title: string;
+  children: ReactNode;
+  footer?: ReactNode;
+}) {
+  if (!open) return null;
   return (
-    <Slot
-      ref={ref}
-      id={formItemId}
-      aria-describedby={!error ? `${formDescriptionId}` : `${formDescriptionId} ${formMessageId}`}
-      aria-invalid={!!error}
-      {...props}
-    />
+    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-foreground/20 p-4 backdrop-blur-[2px]">
+      <div className="mt-10 w-full max-w-2xl rounded-lg border border-border bg-card shadow-lg">
+        <div className="flex items-center justify-between border-b border-border px-5 py-4">
+          <h2 className="display text-lg">{title}</h2>
+          <button onClick={onClose} aria-label="Close" className="text-muted-foreground">
+            <X size={18} />
+          </button>
+        </div>
+        <div className="space-y-4 px-5 py-5">{children}</div>
+        {footer ? (
+          <div className="flex justify-end gap-2 border-t border-border px-5 py-4">{footer}</div>
+        ) : (
+          <div className="flex justify-end gap-2 border-t border-border px-5 py-4">
+            <Button variant="outline" onClick={onClose}>
+              Close
+            </Button>
+          </div>
+        )}
+      </div>
+    </div>
   );
-});
-FormControl.displayName = "FormControl";
+}
 
-const FormDescription = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => {
-  const { formDescriptionId } = useFormField();
-
-  return (
-    <p
-      ref={ref}
-      id={formDescriptionId}
-      className={cn("text-[0.8rem] text-muted-foreground", className)}
-      {...props}
-    />
-  );
-});
-FormDescription.displayName = "FormDescription";
-
-const FormMessage = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, children, ...props }, ref) => {
-  const { error, formMessageId } = useFormField();
-  const body = error ? String(error?.message ?? "") : children;
-
-  if (!body) {
-    return null;
-  }
-
-  return (
-    <p
-      ref={ref}
-      id={formMessageId}
-      className={cn("text-[0.8rem] font-medium text-destructive", className)}
-      {...props}
-    >
-      {body}
-    </p>
-  );
-});
-FormMessage.displayName = "FormMessage";
-
-export {
-  useFormField,
-  Form,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormDescription,
-  FormMessage,
-  FormField,
-};
+export function Grid2({ children }: { children: ReactNode }) {
+  return <div className="grid gap-4 sm:grid-cols-2">{children}</div>;
+}

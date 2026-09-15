@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { toast } from "sonner";
 import { PageHeader } from "@/components/app-shell";
-import { Badge, Card } from "@/components/ui/kit";
+import { Badge, Button, Card, DataFlag, Input, SectionTitle } from "@/components/ui/kit";
 import { useI18n } from "@/lib/i18n";
-import { integrationsQuery } from "@/lib/queries";
+import { integrationsQuery, useSaveRecord, webhooksQuery } from "@/lib/queries";
 
 export const Route = createFileRoute("/_authenticated/integrations")({
   head: () => ({
@@ -31,6 +33,20 @@ function statusTone(status: string) {
 function IntegrationsPage() {
   const { t } = useI18n();
   const { data, isLoading } = useQuery(integrationsQuery);
+  const { data: webhooks } = useQuery(webhooksQuery);
+  const saveWebhook = useSaveRecord("webhook_endpoints");
+  const [drafts, setDrafts] = useState<Record<string, string>>({});
+
+  const saveUrl = (id: string, current: string | null) => {
+    const value = drafts[id] ?? current ?? "";
+    saveWebhook.mutate(
+      { id, values: { url: value || null, is_active: Boolean(value) } },
+      {
+        onSuccess: () => toast.success("Webhook URL saved."),
+        onError: (e) => toast.error(e.message),
+      },
+    );
+  };
 
   return (
     <div>
@@ -65,6 +81,41 @@ function IntegrationsPage() {
         Credentials are stored server-side only. No integration is reported as active until it is
         configured and tested.
       </Card>
+
+      <section className="mt-12 space-y-4">
+        <SectionTitle aside="Automation events sent to n8n">Webhooks</SectionTitle>
+        <div className="divide-y divide-border overflow-hidden rounded-lg border border-border">
+          {(webhooks ?? []).map((w) => (
+            <div
+              key={w.id}
+              className="flex flex-col gap-3 bg-card p-5 sm:flex-row sm:items-center sm:justify-between"
+            >
+              <div className="min-w-48">
+                <div className="font-mono text-sm">{w.event_key}</div>
+                <div className="mt-1">
+                  {w.url ? (
+                    <Badge tone={w.is_active ? "success" : "neutral"}>
+                      {w.is_active ? "ACTIVE" : "INACTIVE"}
+                    </Badge>
+                  ) : (
+                    <DataFlag kind="NOT_CONFIGURED" />
+                  )}
+                </div>
+              </div>
+              <div className="flex flex-1 items-center gap-2">
+                <Input
+                  value={drafts[w.id] ?? w.url ?? ""}
+                  placeholder="https://your-n8n-instance/webhook/..."
+                  onChange={(e) => setDrafts({ ...drafts, [w.id]: e.target.value })}
+                />
+                <Button size="sm" variant="outline" onClick={() => saveUrl(w.id, w.url)}>
+                  {t("save")}
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }
