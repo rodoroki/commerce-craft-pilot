@@ -18,6 +18,7 @@ import { Route as AuthenticatedIntegrationsRouteImport } from './routes/_authent
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedSuppliersRouteImport } from './routes/_authenticated/suppliers'
 import { Route as AuthenticatedProductsIndexRouteImport } from './routes/_authenticated/products.index'
+import { Route as AuthenticatedProductsSlugRouteImport } from './routes/_authenticated/products.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -65,6 +66,12 @@ const AuthenticatedProductsIndexRoute =
     path: '/products/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedProductsSlugRoute =
+  AuthenticatedProductsSlugRouteImport.update({
+    id: '/products/$slug',
+    path: '/products/$slug',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -74,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/integrations': typeof AuthenticatedIntegrationsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/suppliers': typeof AuthenticatedSuppliersRoute
+  '/products/$slug': typeof AuthenticatedProductsSlugRoute
   '/products/': typeof AuthenticatedProductsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -84,6 +92,7 @@ export interface FileRoutesByTo {
   '/integrations': typeof AuthenticatedIntegrationsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/suppliers': typeof AuthenticatedSuppliersRoute
+  '/products/$slug': typeof AuthenticatedProductsSlugRoute
   '/products': typeof AuthenticatedProductsIndexRoute
 }
 export interface FileRoutesById {
@@ -96,6 +105,7 @@ export interface FileRoutesById {
   '/_authenticated/integrations': typeof AuthenticatedIntegrationsRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/suppliers': typeof AuthenticatedSuppliersRoute
+  '/_authenticated/products/$slug': typeof AuthenticatedProductsSlugRoute
   '/_authenticated/products/': typeof AuthenticatedProductsIndexRoute
 }
 export interface FileRouteTypes {
@@ -108,6 +118,7 @@ export interface FileRouteTypes {
     | '/integrations'
     | '/settings'
     | '/suppliers'
+    | '/products/$slug'
     | '/products/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -118,6 +129,7 @@ export interface FileRouteTypes {
     | '/integrations'
     | '/settings'
     | '/suppliers'
+    | '/products/$slug'
     | '/products'
   id:
     | '__root__'
@@ -129,6 +141,7 @@ export interface FileRouteTypes {
     | '/_authenticated/integrations'
     | '/_authenticated/settings'
     | '/_authenticated/suppliers'
+    | '/_authenticated/products/$slug'
     | '/_authenticated/products/'
   fileRoutesById: FileRoutesById
 }
@@ -203,6 +216,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProductsIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/products/$slug': {
+      id: '/_authenticated/products/$slug'
+      path: '/products/$slug'
+      fullPath: '/products/$slug'
+      preLoaderRoute: typeof AuthenticatedProductsSlugRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -212,6 +232,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedIntegrationsRoute: typeof AuthenticatedIntegrationsRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedSuppliersRoute: typeof AuthenticatedSuppliersRoute
+  AuthenticatedProductsSlugRoute: typeof AuthenticatedProductsSlugRoute
   AuthenticatedProductsIndexRoute: typeof AuthenticatedProductsIndexRoute
 }
 
@@ -221,6 +242,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedIntegrationsRoute: AuthenticatedIntegrationsRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedSuppliersRoute: AuthenticatedSuppliersRoute,
+  AuthenticatedProductsSlugRoute: AuthenticatedProductsSlugRoute,
   AuthenticatedProductsIndexRoute: AuthenticatedProductsIndexRoute,
 }
 
