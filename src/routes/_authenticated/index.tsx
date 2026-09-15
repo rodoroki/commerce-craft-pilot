@@ -5,9 +5,12 @@ import { Badge, Card, DataFlag, SectionTitle } from "@/components/ui/kit";
 import { useI18n } from "@/lib/i18n";
 import {
   allMetricsQuery,
+  decisionsQuery,
   experimentsQuery,
   integrationsQuery,
+  knowledgeQuery,
   productsQuery,
+  stageHistoryQuery,
   suppliersQuery,
   PRODUCT_STAGES,
 } from "@/lib/queries";
@@ -37,6 +40,9 @@ function CommandCenter() {
   const metrics = useQuery(allMetricsQuery);
   const experiments = useQuery(experimentsQuery);
   const suppliers = useQuery(suppliersQuery);
+  const knowledge = useQuery(knowledgeQuery);
+  const decisions = useQuery(decisionsQuery);
+  const stageHistory = useQuery(stageHistoryQuery);
 
   const commerceConnected = (integrations.data ?? []).some(
     (i) => i.category === "COMMERCE" && i.status === "CONNECTED",
@@ -65,6 +71,17 @@ function CommandCenter() {
     (e) => e.status === "RUNNING" && !e.decision,
   );
   const unratedSuppliers = (suppliers.data ?? []).filter((s) => s.supplier_score === null);
+  const totalBudget = (experiments.data ?? []).reduce((sum, experiment) => sum + Number(experiment.budget ?? 0), 0);
+  const totalSpend = tot.spend ?? 0;
+  const blockers = attention.length + unratedSuppliers.length;
+  const latestChanges = (stageHistory.data ?? []).slice(0, 5);
+  const latestLearning = (knowledge.data ?? [])[0];
+  const latestDecision = (decisions.data ?? [])[0];
+  const topAction = attention[0]
+    ? `Complete evidence and sourcing for ${attention[0].name}.`
+    : thinExperiments[0]
+      ? `Collect enough data to decide ${thinExperiments[0].code ?? "the active experiment"}.`
+      : "No urgent action is currently indicated.";
 
   return (
     <div className="space-y-14">
@@ -102,7 +119,15 @@ function CommandCenter() {
       </section>
 
       <section className="space-y-4">
-        <SectionTitle>{t("command.attention")}</SectionTitle>
+        <SectionTitle>{t("intelligence.nextAction")}</SectionTitle>
+        <Card className="p-6">
+          <div className="display text-2xl">{topAction}</div>
+          <p className="mt-2 text-sm text-muted-foreground">Selected from unresolved product evidence, supplier confidence, and experiment thresholds.</p>
+        </Card>
+      </section>
+
+      <section className="space-y-4">
+        <SectionTitle>{t("command.attention")} · {t("intelligence.blocking")}</SectionTitle>
         {attention.length === 0 ? (
           <p className="text-sm text-muted-foreground">{t("command.attentionEmpty")}</p>
         ) : (
@@ -143,6 +168,41 @@ function CommandCenter() {
               </p>
             </Card>
           </Link>
+        </div>
+      </section>
+
+      <section className="grid gap-6 lg:grid-cols-2">
+        <div className="space-y-4">
+          <SectionTitle>{t("intelligence.capital")}</SectionTitle>
+          <Card className="p-5">
+            <div className="grid grid-cols-3 gap-5">
+              <div><div className="label-xs">Planned</div><div className="numeral mt-2 text-xl">{totalBudget > 0 ? fmtNum(totalBudget, 2) : <DataFlag kind="NO_DATA" />}</div></div>
+              <div><div className="label-xs">Spent</div><div className="numeral mt-2 text-xl">{totalSpend > 0 ? fmtNum(totalSpend, 2) : <DataFlag kind="NO_DATA" />}</div></div>
+              <div><div className="label-xs">Blocked areas</div><div className="numeral mt-2 text-xl">{blockers}</div></div>
+            </div>
+            <p className="mt-4 text-xs text-muted-foreground">Capital exposure uses recorded experiment budgets and spend only. Revenue is not profit.</p>
+          </Card>
+        </div>
+        <div className="space-y-4">
+          <SectionTitle>{t("intelligence.changed")}</SectionTitle>
+          <Card className="divide-y divide-border">
+            {latestChanges.length === 0 ? <div className="p-5"><DataFlag kind="NO_DATA" /></div> : latestChanges.map((change) => <div key={change.id} className="flex items-center justify-between gap-4 px-5 py-3 text-sm"><span>{change.from_stage ? `${change.from_stage} → ` : ""}{change.to_stage}</span><span className="text-xs text-muted-foreground">{new Date(change.created_at).toLocaleDateString()}</span></div>)}
+          </Card>
+        </div>
+      </section>
+
+      <section className="grid gap-6 lg:grid-cols-2">
+        <div className="space-y-4">
+          <SectionTitle>{t("intelligence.learning")}</SectionTitle>
+          <Card className="p-5">
+            {latestLearning ? <><div className="flex items-center gap-2"><Badge tone={latestLearning.status === "CONSOLIDATED" ? "success" : "warning"}>{latestLearning.status}</Badge><span className="label-xs">{latestLearning.observations_count} observations</span></div><p className="mt-3 text-sm">{latestLearning.insight}</p></> : <DataFlag kind="NO_DATA" />}
+          </Card>
+        </div>
+        <div className="space-y-4">
+          <SectionTitle>{t("intelligence.decision")}</SectionTitle>
+          <Card className="p-5">
+            {latestDecision ? <><Badge tone={latestDecision.decision === "SCALE" ? "success" : "accent"}>{latestDecision.decision.replace(/_/g, " ")}</Badge><p className="mt-3 text-sm text-muted-foreground">{latestDecision.next_action}</p></> : <><DataFlag kind="NO_DATA" /><p className="mt-3 text-sm text-muted-foreground">No formal evidence-backed decision has been saved.</p></>}
+          </Card>
         </div>
       </section>
     </div>
