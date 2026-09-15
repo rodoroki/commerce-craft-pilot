@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_runs: {
+        Row: {
+          confidence: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          input: Json | null
+          model: string
+          output: string | null
+          prompt: string | null
+          provider: string
+          task: string
+        }
+        Insert: {
+          confidence?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          input?: Json | null
+          model: string
+          output?: string | null
+          prompt?: string | null
+          provider: string
+          task: string
+        }
+        Update: {
+          confidence?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          input?: Json | null
+          model?: string
+          output?: string | null
+          prompt?: string | null
+          provider?: string
+          task?: string
+        }
+        Relationships: []
+      }
       brands: {
         Row: {
           audience: string | null
@@ -80,6 +119,381 @@ export type Database = {
         }
         Relationships: []
       }
+      creatives: {
+        Row: {
+          ai_generated: boolean
+          audience: string | null
+          brand_id: string | null
+          code: string | null
+          concept: string | null
+          created_at: string
+          format: string | null
+          hook: string | null
+          id: string
+          notes: string | null
+          platform: string | null
+          product_id: string | null
+          script: string | null
+          status: Database["public"]["Enums"]["creative_status"]
+          thumbnail_url: string | null
+          updated_at: string
+          url: string | null
+          video_url: string | null
+        }
+        Insert: {
+          ai_generated?: boolean
+          audience?: string | null
+          brand_id?: string | null
+          code?: string | null
+          concept?: string | null
+          created_at?: string
+          format?: string | null
+          hook?: string | null
+          id?: string
+          notes?: string | null
+          platform?: string | null
+          product_id?: string | null
+          script?: string | null
+          status?: Database["public"]["Enums"]["creative_status"]
+          thumbnail_url?: string | null
+          updated_at?: string
+          url?: string | null
+          video_url?: string | null
+        }
+        Update: {
+          ai_generated?: boolean
+          audience?: string | null
+          brand_id?: string | null
+          code?: string | null
+          concept?: string | null
+          created_at?: string
+          format?: string | null
+          hook?: string | null
+          id?: string
+          notes?: string | null
+          platform?: string | null
+          product_id?: string | null
+          script?: string | null
+          status?: Database["public"]["Enums"]["creative_status"]
+          thumbnail_url?: string | null
+          updated_at?: string
+          url?: string | null
+          video_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "creatives_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "creatives_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      experiment_metrics: {
+        Row: {
+          add_to_cart: number | null
+          begin_checkout: number | null
+          clicks: number | null
+          created_at: string
+          experiment_id: string
+          id: string
+          impressions: number | null
+          metric_date: string
+          page_views: number | null
+          purchases: number | null
+          refunds: number | null
+          revenue: number | null
+          source: string | null
+          spend: number | null
+          view_content: number | null
+        }
+        Insert: {
+          add_to_cart?: number | null
+          begin_checkout?: number | null
+          clicks?: number | null
+          created_at?: string
+          experiment_id: string
+          id?: string
+          impressions?: number | null
+          metric_date: string
+          page_views?: number | null
+          purchases?: number | null
+          refunds?: number | null
+          revenue?: number | null
+          source?: string | null
+          spend?: number | null
+          view_content?: number | null
+        }
+        Update: {
+          add_to_cart?: number | null
+          begin_checkout?: number | null
+          clicks?: number | null
+          created_at?: string
+          experiment_id?: string
+          id?: string
+          impressions?: number | null
+          metric_date?: string
+          page_views?: number | null
+          purchases?: number | null
+          refunds?: number | null
+          revenue?: number | null
+          source?: string | null
+          spend?: number | null
+          view_content?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "experiment_metrics_experiment_id_fkey"
+            columns: ["experiment_id"]
+            isOneToOne: false
+            referencedRelation: "experiments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      experiments: {
+        Row: {
+          audience: string | null
+          brand_id: string | null
+          budget: number | null
+          code: string | null
+          created_at: string
+          creative_id: string | null
+          decision: string | null
+          end_date: string | null
+          hypothesis: string | null
+          id: string
+          landing_page_id: string | null
+          notes: string | null
+          offer: string | null
+          product_id: string | null
+          result: string | null
+          start_date: string | null
+          status: Database["public"]["Enums"]["experiment_status"]
+          traffic_source: string | null
+          updated_at: string
+        }
+        Insert: {
+          audience?: string | null
+          brand_id?: string | null
+          budget?: number | null
+          code?: string | null
+          created_at?: string
+          creative_id?: string | null
+          decision?: string | null
+          end_date?: string | null
+          hypothesis?: string | null
+          id?: string
+          landing_page_id?: string | null
+          notes?: string | null
+          offer?: string | null
+          product_id?: string | null
+          result?: string | null
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["experiment_status"]
+          traffic_source?: string | null
+          updated_at?: string
+        }
+        Update: {
+          audience?: string | null
+          brand_id?: string | null
+          budget?: number | null
+          code?: string | null
+          created_at?: string
+          creative_id?: string | null
+          decision?: string | null
+          end_date?: string | null
+          hypothesis?: string | null
+          id?: string
+          landing_page_id?: string | null
+          notes?: string | null
+          offer?: string | null
+          product_id?: string | null
+          result?: string | null
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["experiment_status"]
+          traffic_source?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "experiments_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "experiments_creative_id_fkey"
+            columns: ["creative_id"]
+            isOneToOne: false
+            referencedRelation: "creatives"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "experiments_landing_page_id_fkey"
+            columns: ["landing_page_id"]
+            isOneToOne: false
+            referencedRelation: "landing_pages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "experiments_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      funnel_events: {
+        Row: {
+          brand_id: string | null
+          currency: string | null
+          event_type: Database["public"]["Enums"]["funnel_event_type"]
+          experiment_id: string | null
+          external_id: string | null
+          id: string
+          landing_page_id: string | null
+          occurred_at: string
+          payload: Json | null
+          product_id: string | null
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          utm_term: string | null
+          value: number | null
+        }
+        Insert: {
+          brand_id?: string | null
+          currency?: string | null
+          event_type: Database["public"]["Enums"]["funnel_event_type"]
+          experiment_id?: string | null
+          external_id?: string | null
+          id?: string
+          landing_page_id?: string | null
+          occurred_at?: string
+          payload?: Json | null
+          product_id?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+          value?: number | null
+        }
+        Update: {
+          brand_id?: string | null
+          currency?: string | null
+          event_type?: Database["public"]["Enums"]["funnel_event_type"]
+          experiment_id?: string | null
+          external_id?: string | null
+          id?: string
+          landing_page_id?: string | null
+          occurred_at?: string
+          payload?: Json | null
+          product_id?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+          value?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "funnel_events_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "funnel_events_experiment_id_fkey"
+            columns: ["experiment_id"]
+            isOneToOne: false
+            referencedRelation: "experiments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "funnel_events_landing_page_id_fkey"
+            columns: ["landing_page_id"]
+            isOneToOne: false
+            referencedRelation: "landing_pages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "funnel_events_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hooks: {
+        Row: {
+          ai_generated: boolean
+          angle: string | null
+          brand_id: string | null
+          created_at: string
+          id: string
+          is_hypothesis: boolean
+          notes: string | null
+          product_id: string | null
+          text: string
+          updated_at: string
+        }
+        Insert: {
+          ai_generated?: boolean
+          angle?: string | null
+          brand_id?: string | null
+          created_at?: string
+          id?: string
+          is_hypothesis?: boolean
+          notes?: string | null
+          product_id?: string | null
+          text: string
+          updated_at?: string
+        }
+        Update: {
+          ai_generated?: boolean
+          angle?: string | null
+          brand_id?: string | null
+          created_at?: string
+          id?: string
+          is_hypothesis?: boolean
+          notes?: string | null
+          product_id?: string | null
+          text?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hooks_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hooks_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       integrations: {
         Row: {
           category: string
@@ -115,6 +529,123 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      knowledge_entries: {
+        Row: {
+          ai_generated: boolean
+          brand_id: string | null
+          category: string | null
+          created_at: string
+          evidence: string | null
+          id: string
+          insight: string
+          observations_count: number
+          product_id: string | null
+          status: Database["public"]["Enums"]["knowledge_status"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          ai_generated?: boolean
+          brand_id?: string | null
+          category?: string | null
+          created_at?: string
+          evidence?: string | null
+          id?: string
+          insight: string
+          observations_count?: number
+          product_id?: string | null
+          status?: Database["public"]["Enums"]["knowledge_status"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          ai_generated?: boolean
+          brand_id?: string | null
+          category?: string | null
+          created_at?: string
+          evidence?: string | null
+          id?: string
+          insight?: string
+          observations_count?: number
+          product_id?: string | null
+          status?: Database["public"]["Enums"]["knowledge_status"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "knowledge_entries_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "knowledge_entries_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      landing_pages: {
+        Row: {
+          blocks: Json
+          brand_id: string | null
+          created_at: string
+          id: string
+          notes: string | null
+          offer: string | null
+          product_id: string | null
+          slug: string
+          status: Database["public"]["Enums"]["landing_status"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          blocks?: Json
+          brand_id?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          offer?: string | null
+          product_id?: string | null
+          slug: string
+          status?: Database["public"]["Enums"]["landing_status"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          blocks?: Json
+          brand_id?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          offer?: string | null
+          product_id?: string | null
+          slug?: string
+          status?: Database["public"]["Enums"]["landing_status"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "landing_pages_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "landing_pages_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       product_sources: {
         Row: {
@@ -456,6 +987,39 @@ export type Database = {
         }
         Relationships: []
       }
+      webhook_endpoints: {
+        Row: {
+          created_at: string
+          event_key: string
+          id: string
+          is_active: boolean
+          last_delivery_at: string | null
+          last_status: string | null
+          updated_at: string
+          url: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_key: string
+          id?: string
+          is_active?: boolean
+          last_delivery_at?: string | null
+          last_status?: string | null
+          updated_at?: string
+          url?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_key?: string
+          id?: string
+          is_active?: boolean
+          last_delivery_at?: string | null
+          last_status?: string | null
+          updated_at?: string
+          url?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -471,7 +1035,28 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "operator" | "viewer"
+      creative_status:
+        | "IDEA"
+        | "SCRIPTED"
+        | "PRODUCTION"
+        | "LIVE"
+        | "PAUSED"
+        | "ARCHIVED"
+      experiment_status: "DRAFT" | "RUNNING" | "PAUSED" | "COMPLETED"
+      funnel_event_type:
+        | "PAGE_VIEW"
+        | "VIEW_CONTENT"
+        | "ADD_TO_CART"
+        | "BEGIN_CHECKOUT"
+        | "PURCHASE"
+        | "REFUND"
+        | "LEAD"
+        | "EMAIL_SIGNUP"
+        | "COUPON"
+        | "UPSELL"
       integration_status: "CONNECTED" | "NOT_CONFIGURED" | "ERROR"
+      knowledge_status: "HYPOTHESIS" | "SUPPORTED" | "CONSOLIDATED" | "REJECTED"
+      landing_status: "DRAFT" | "LIVE" | "ARCHIVED"
       product_stage:
         | "IDEA"
         | "SOURCING"
@@ -610,7 +1195,30 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "operator", "viewer"],
+      creative_status: [
+        "IDEA",
+        "SCRIPTED",
+        "PRODUCTION",
+        "LIVE",
+        "PAUSED",
+        "ARCHIVED",
+      ],
+      experiment_status: ["DRAFT", "RUNNING", "PAUSED", "COMPLETED"],
+      funnel_event_type: [
+        "PAGE_VIEW",
+        "VIEW_CONTENT",
+        "ADD_TO_CART",
+        "BEGIN_CHECKOUT",
+        "PURCHASE",
+        "REFUND",
+        "LEAD",
+        "EMAIL_SIGNUP",
+        "COUPON",
+        "UPSELL",
+      ],
       integration_status: ["CONNECTED", "NOT_CONFIGURED", "ERROR"],
+      knowledge_status: ["HYPOTHESIS", "SUPPORTED", "CONSOLIDATED", "REJECTED"],
+      landing_status: ["DRAFT", "LIVE", "ARCHIVED"],
       product_stage: [
         "IDEA",
         "SOURCING",

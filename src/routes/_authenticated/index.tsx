@@ -3,7 +3,15 @@ import { useQuery } from "@tanstack/react-query";
 import { PageHeader } from "@/components/app-shell";
 import { Badge, Card, DataFlag, SectionTitle } from "@/components/ui/kit";
 import { useI18n } from "@/lib/i18n";
-import { integrationsQuery, productsQuery, PRODUCT_STAGES } from "@/lib/queries";
+import {
+  allMetricsQuery,
+  experimentsQuery,
+  integrationsQuery,
+  productsQuery,
+  suppliersQuery,
+  PRODUCT_STAGES,
+} from "@/lib/queries";
+import { derive, fmtNum, fmtPct, totals } from "@/lib/analytics";
 
 export const Route = createFileRoute("/_authenticated/")({
   head: () => ({
@@ -22,24 +30,30 @@ export const Route = createFileRoute("/_authenticated/")({
   component: CommandCenter,
 });
 
-const BUSINESS = [
-  "metric.revenue",
-  "metric.orders",
-  "metric.aov",
-  "metric.cac",
-  "metric.roas",
-  "metric.contributionMargin",
-  "metric.refundRate",
-];
-
 function CommandCenter() {
   const { t } = useI18n();
   const products = useQuery(productsQuery);
   const integrations = useQuery(integrationsQuery);
+  const metrics = useQuery(allMetricsQuery);
+  const experiments = useQuery(experimentsQuery);
+  const suppliers = useQuery(suppliersQuery);
 
   const commerceConnected = (integrations.data ?? []).some(
     (i) => i.category === "COMMERCE" && i.status === "CONNECTED",
   );
+
+  const tot = totals(metrics.data ?? []);
+  const der = derive(tot);
+
+  const business: [string, string | null][] = [
+    [t("metric.revenue"), fmtNum(tot.revenue, 2)],
+    [t("metric.orders"), fmtNum(tot.purchases)],
+    [t("metric.aov"), fmtNum(der.aov, 2)],
+    [t("metric.cac"), fmtNum(der.cac, 2)],
+    [t("metric.roas"), fmtNum(der.roas, 2)],
+    [t("metric.contributionMargin"), null],
+    [t("metric.refundRate"), fmtPct(der.refundRate)],
+  ];
 
   const counts = PRODUCT_STAGES.map((stage) => ({
     stage,
@@ -47,6 +61,10 @@ function CommandCenter() {
   }));
 
   const attention = (products.data ?? []).filter((p) => p.score === null || p.stage === "SOURCING");
+  const thinExperiments = (experiments.data ?? []).filter(
+    (e) => e.status === "RUNNING" && !e.decision,
+  );
+  const unratedSuppliers = (suppliers.data ?? []).filter((s) => s.supplier_score === null);
 
   return (
     <div className="space-y-14">
@@ -56,12 +74,16 @@ function CommandCenter() {
         <SectionTitle aside={!commerceConnected ? <DataFlag kind="NOT_CONFIGURED" /> : undefined}>
           {t("command.business")}
         </SectionTitle>
-        <p className="text-sm text-muted-foreground">{t("command.noBusinessData")}</p>
+        {!commerceConnected ? (
+          <p className="text-sm text-muted-foreground">{t("command.noBusinessData")}</p>
+        ) : null}
         <div className="grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-4">
-          {BUSINESS.map((key) => (
-            <div key={key} className="bg-card p-4">
-              <div className="label-xs">{t(key)}</div>
-              <div className="numeral mt-2 text-sm text-muted-foreground">{t("state.noData")}</div>
+          {business.map(([label, value]) => (
+            <div key={label} className="bg-card p-4">
+              <div className="label-xs">{label}</div>
+              <div className="numeral mt-2 text-sm">
+                {value ?? <span className="text-muted-foreground">{t("state.noData")}</span>}
+              </div>
             </div>
           ))}
         </div>
@@ -102,6 +124,26 @@ function CommandCenter() {
             ))}
           </div>
         )}
+        <div className="grid gap-3 sm:grid-cols-2">
+          <Link to="/experiments" className="block">
+            <Card className="p-4 transition-colors hover:bg-surface">
+              <div className="label-xs">Experiments without a decision</div>
+              <div className="numeral mt-2 text-2xl">{thinExperiments.length}</div>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Running tests still below the data threshold for a verdict.
+              </p>
+            </Card>
+          </Link>
+          <Link to="/suppliers" className="block">
+            <Card className="p-4 transition-colors hover:bg-surface">
+              <div className="label-xs">Suppliers without a reliability score</div>
+              <div className="numeral mt-2 text-2xl">{unratedSuppliers.length}</div>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Sourcing decisions stay blocked until these are rated.
+              </p>
+            </Card>
+          </Link>
+        </div>
       </section>
     </div>
   );
