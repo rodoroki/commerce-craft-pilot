@@ -108,7 +108,7 @@ function ProductDetail() {
   if (isLoading) return <p className="text-sm text-muted-foreground">{t("state.loading")}</p>;
   if (!data) return <p className="text-sm text-muted-foreground">Product not found.</p>;
 
-  const { product, sources, history, creatives, hooks, landings, experiments } = data;
+  const { product, sources, history, creatives, hooks, landings, experiments, evidence } = data;
   const currency = product.currency ?? "USD";
   const econ = computeEconomics({
     suggested_price: num(product.suggested_price),
