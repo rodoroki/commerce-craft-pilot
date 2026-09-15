@@ -29,7 +29,7 @@ function About() {
         <h1 className="display mt-3 max-w-2xl text-4xl sm:text-5xl">
           The dog should come along.
         </h1>
-        <p className="mt-5 max-w-xl text-muted-foreground">{BRAND.positioningLine}</p>
+        <p className="mt-5 max-w-xl text-muted-foreground">{BRAND.purpose}</p>
       </Section>
 
       <Section className="pt-0">
