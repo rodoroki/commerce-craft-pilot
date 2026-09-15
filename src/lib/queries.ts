@@ -17,6 +17,9 @@ export type FunnelEvent = Tables<"funnel_events">;
 export type KnowledgeEntry = Tables<"knowledge_entries">;
 export type AiRun = Tables<"ai_runs">;
 export type WebhookEndpoint = Tables<"webhook_endpoints">;
+export type EvidenceItem = Tables<"evidence_items">;
+export type IntelligenceDecision = Tables<"intelligence_decisions">;
+export type KnowledgeHistory = Tables<"knowledge_history">;
 
 export const PRODUCT_STAGES = [
   "IDEA",
@@ -251,6 +254,37 @@ export const aiRunsQuery = queryOptions({
     ),
 });
 
+export const evidenceQuery = queryOptions({
+  queryKey: ["evidence_items"],
+  queryFn: async () =>
+    unwrap(
+      await supabase.from("evidence_items").select("*").order("created_at", { ascending: false }),
+    ) as EvidenceItem[],
+});
+
+export const decisionsQuery = queryOptions({
+  queryKey: ["intelligence_decisions"],
+  queryFn: async () =>
+    unwrap(
+      await supabase
+        .from("intelligence_decisions")
+        .select("*")
+        .order("created_at", { ascending: false }),
+    ) as IntelligenceDecision[],
+});
+
+export const stageHistoryQuery = queryOptions({
+  queryKey: ["product_stage_history"],
+  queryFn: async () =>
+    unwrap(
+      await supabase
+        .from("product_stage_history")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(200),
+    ) as StageHistory[],
+});
+
 export const productDetailQuery = (slug: string) =>
   queryOptions({
     queryKey: ["product", slug],
@@ -284,7 +318,21 @@ export const productDetailQuery = (slug: string) =>
       const experiments = unwrap(
         await supabase.from("experiments").select("*").eq("product_id", product.id),
       ) as Experiment[];
-      return { product, sources, history, creatives, hooks, landings, experiments };
+      const evidence = unwrap(
+        await supabase
+          .from("evidence_items")
+          .select("*")
+          .eq("product_id", product.id)
+          .order("created_at", { ascending: false }),
+      ) as EvidenceItem[];
+      const decisions = unwrap(
+        await supabase
+          .from("intelligence_decisions")
+          .select("*")
+          .eq("product_id", product.id)
+          .order("created_at", { ascending: false }),
+      ) as IntelligenceDecision[];
+      return { product, sources, history, creatives, hooks, landings, experiments, evidence, decisions };
     },
   });
 
@@ -300,7 +348,9 @@ type TableName =
   | "experiment_metrics"
   | "knowledge_entries"
   | "webhook_endpoints"
-  | "integrations";
+  | "integrations"
+  | "evidence_items"
+  | "intelligence_decisions";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const db = supabase as unknown as {

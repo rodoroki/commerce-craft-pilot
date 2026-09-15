@@ -197,6 +197,83 @@ export type Database = {
           },
         ]
       }
+      evidence_items: {
+        Row: {
+          claim: string
+          created_at: string
+          created_by: string | null
+          experiment_id: string | null
+          id: string
+          knowledge_entry_id: string | null
+          notes: string | null
+          observed_at: string | null
+          product_id: string | null
+          source: string
+          source_url: string | null
+          status: Database["public"]["Enums"]["evidence_status"]
+          supplier_id: string | null
+        }
+        Insert: {
+          claim: string
+          created_at?: string
+          created_by?: string | null
+          experiment_id?: string | null
+          id?: string
+          knowledge_entry_id?: string | null
+          notes?: string | null
+          observed_at?: string | null
+          product_id?: string | null
+          source: string
+          source_url?: string | null
+          status?: Database["public"]["Enums"]["evidence_status"]
+          supplier_id?: string | null
+        }
+        Update: {
+          claim?: string
+          created_at?: string
+          created_by?: string | null
+          experiment_id?: string | null
+          id?: string
+          knowledge_entry_id?: string | null
+          notes?: string | null
+          observed_at?: string | null
+          product_id?: string | null
+          source?: string
+          source_url?: string | null
+          status?: Database["public"]["Enums"]["evidence_status"]
+          supplier_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "evidence_items_experiment_id_fkey"
+            columns: ["experiment_id"]
+            isOneToOne: false
+            referencedRelation: "experiments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "evidence_items_knowledge_entry_id_fkey"
+            columns: ["knowledge_entry_id"]
+            isOneToOne: false
+            referencedRelation: "knowledge_entries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "evidence_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "evidence_items_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       experiment_metrics: {
         Row: {
           add_to_cart: number | null
@@ -530,18 +607,83 @@ export type Database = {
         }
         Relationships: []
       }
+      intelligence_decisions: {
+        Row: {
+          confidence: Database["public"]["Enums"]["confidence_level"]
+          created_at: string
+          created_by: string | null
+          decision: Database["public"]["Enums"]["intelligence_decision"]
+          evidence_snapshot: Json
+          experiment_id: string | null
+          id: string
+          next_action: string
+          product_id: string | null
+          risk: string | null
+          unknowns: string[]
+          why: string[]
+        }
+        Insert: {
+          confidence?: Database["public"]["Enums"]["confidence_level"]
+          created_at?: string
+          created_by?: string | null
+          decision: Database["public"]["Enums"]["intelligence_decision"]
+          evidence_snapshot?: Json
+          experiment_id?: string | null
+          id?: string
+          next_action: string
+          product_id?: string | null
+          risk?: string | null
+          unknowns?: string[]
+          why?: string[]
+        }
+        Update: {
+          confidence?: Database["public"]["Enums"]["confidence_level"]
+          created_at?: string
+          created_by?: string | null
+          decision?: Database["public"]["Enums"]["intelligence_decision"]
+          evidence_snapshot?: Json
+          experiment_id?: string | null
+          id?: string
+          next_action?: string
+          product_id?: string | null
+          risk?: string | null
+          unknowns?: string[]
+          why?: string[]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "intelligence_decisions_experiment_id_fkey"
+            columns: ["experiment_id"]
+            isOneToOne: false
+            referencedRelation: "experiments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "intelligence_decisions_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       knowledge_entries: {
         Row: {
           ai_generated: boolean
           brand_id: string | null
           category: string | null
+          confidence: Database["public"]["Enums"]["confidence_level"]
           created_at: string
           evidence: string | null
           id: string
           insight: string
+          next_action: string | null
+          observation: string | null
           observations_count: number
           product_id: string | null
+          signal: string | null
           status: Database["public"]["Enums"]["knowledge_status"]
+          test_result: string | null
           title: string
           updated_at: string
         }
@@ -549,13 +691,18 @@ export type Database = {
           ai_generated?: boolean
           brand_id?: string | null
           category?: string | null
+          confidence?: Database["public"]["Enums"]["confidence_level"]
           created_at?: string
           evidence?: string | null
           id?: string
           insight: string
+          next_action?: string | null
+          observation?: string | null
           observations_count?: number
           product_id?: string | null
+          signal?: string | null
           status?: Database["public"]["Enums"]["knowledge_status"]
+          test_result?: string | null
           title: string
           updated_at?: string
         }
@@ -563,13 +710,18 @@ export type Database = {
           ai_generated?: boolean
           brand_id?: string | null
           category?: string | null
+          confidence?: Database["public"]["Enums"]["confidence_level"]
           created_at?: string
           evidence?: string | null
           id?: string
           insight?: string
+          next_action?: string | null
+          observation?: string | null
           observations_count?: number
           product_id?: string | null
+          signal?: string | null
           status?: Database["public"]["Enums"]["knowledge_status"]
+          test_result?: string | null
           title?: string
           updated_at?: string
         }
@@ -586,6 +738,44 @@ export type Database = {
             columns: ["product_id"]
             isOneToOne: false
             referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      knowledge_history: {
+        Row: {
+          changed_by: string | null
+          created_at: string
+          from_status: Database["public"]["Enums"]["knowledge_status"] | null
+          id: string
+          knowledge_entry_id: string
+          observations_count: number
+          to_status: Database["public"]["Enums"]["knowledge_status"]
+        }
+        Insert: {
+          changed_by?: string | null
+          created_at?: string
+          from_status?: Database["public"]["Enums"]["knowledge_status"] | null
+          id?: string
+          knowledge_entry_id: string
+          observations_count?: number
+          to_status: Database["public"]["Enums"]["knowledge_status"]
+        }
+        Update: {
+          changed_by?: string | null
+          created_at?: string
+          from_status?: Database["public"]["Enums"]["knowledge_status"] | null
+          id?: string
+          knowledge_entry_id?: string
+          observations_count?: number
+          to_status?: Database["public"]["Enums"]["knowledge_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "knowledge_history_knowledge_entry_id_fkey"
+            columns: ["knowledge_entry_id"]
+            isOneToOne: false
+            referencedRelation: "knowledge_entries"
             referencedColumns: ["id"]
           },
         ]
@@ -1035,6 +1225,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "operator" | "viewer"
+      confidence_level: "VERIFIED" | "HIGH" | "MEDIUM" | "LOW" | "UNVERIFIED"
       creative_status:
         | "IDEA"
         | "SCRIPTED"
@@ -1042,6 +1233,15 @@ export type Database = {
         | "LIVE"
         | "PAUSED"
         | "ARCHIVED"
+      evidence_status:
+        | "VERIFIED"
+        | "OBSERVED"
+        | "DECLARED_BY_SUPPLIER"
+        | "HYPOTHESIS"
+        | "ESTIMATE"
+        | "AI_GENERATED"
+        | "UNKNOWN"
+        | "INSUFFICIENT_DATA"
       experiment_status: "DRAFT" | "RUNNING" | "PAUSED" | "COMPLETED"
       funnel_event_type:
         | "PAGE_VIEW"
@@ -1055,6 +1255,17 @@ export type Database = {
         | "COUPON"
         | "UPSELL"
       integration_status: "CONNECTED" | "NOT_CONFIGURED" | "ERROR"
+      intelligence_decision:
+        | "CONTINUE_TESTING"
+        | "SCALE"
+        | "REWORK_OFFER"
+        | "CHANGE_CREATIVE"
+        | "CHANGE_AUDIENCE"
+        | "CHANGE_LANDING"
+        | "CHANGE_SUPPLIER"
+        | "VERIFY_DATA"
+        | "WAIT_FOR_MORE_DATA"
+        | "KILL"
       knowledge_status: "HYPOTHESIS" | "SUPPORTED" | "CONSOLIDATED" | "REJECTED"
       landing_status: "DRAFT" | "LIVE" | "ARCHIVED"
       product_stage:
@@ -1195,6 +1406,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "operator", "viewer"],
+      confidence_level: ["VERIFIED", "HIGH", "MEDIUM", "LOW", "UNVERIFIED"],
       creative_status: [
         "IDEA",
         "SCRIPTED",
@@ -1202,6 +1414,16 @@ export const Constants = {
         "LIVE",
         "PAUSED",
         "ARCHIVED",
+      ],
+      evidence_status: [
+        "VERIFIED",
+        "OBSERVED",
+        "DECLARED_BY_SUPPLIER",
+        "HYPOTHESIS",
+        "ESTIMATE",
+        "AI_GENERATED",
+        "UNKNOWN",
+        "INSUFFICIENT_DATA",
       ],
       experiment_status: ["DRAFT", "RUNNING", "PAUSED", "COMPLETED"],
       funnel_event_type: [
@@ -1217,6 +1439,18 @@ export const Constants = {
         "UPSELL",
       ],
       integration_status: ["CONNECTED", "NOT_CONFIGURED", "ERROR"],
+      intelligence_decision: [
+        "CONTINUE_TESTING",
+        "SCALE",
+        "REWORK_OFFER",
+        "CHANGE_CREATIVE",
+        "CHANGE_AUDIENCE",
+        "CHANGE_LANDING",
+        "CHANGE_SUPPLIER",
+        "VERIFY_DATA",
+        "WAIT_FOR_MORE_DATA",
+        "KILL",
+      ],
       knowledge_status: ["HYPOTHESIS", "SUPPORTED", "CONSOLIDATED", "REJECTED"],
       landing_status: ["DRAFT", "LIVE", "ARCHIVED"],
       product_stage: [

@@ -80,7 +80,11 @@ export type Verdict =
   | "SCALE"
   | "REWORK_OFFER"
   | "CHANGE_CREATIVE"
+  | "CHANGE_AUDIENCE"
+  | "CHANGE_LANDING"
   | "CHANGE_SUPPLIER"
+  | "VERIFY_DATA"
+  | "WAIT_FOR_MORE_DATA"
   | "KILL";
 
 export type Decision = { verdict: Verdict; reasons: string[]; indicators: string[] };

@@ -29,6 +29,7 @@ const TASK_PROMPTS: Record<string, string> = {
 const inputSchema = z.object({
   task: z.enum(AI_TASKS),
   context: z.string().min(1).max(8000),
+  productId: z.string().uuid().optional(),
 });
 
 /**
@@ -45,7 +46,17 @@ export const runAiTask = createServerFn({ method: "POST" })
     }
     const provider = "lovable-ai-gateway";
     const model = "google/gemini-3-flash-preview";
-    const system = TASK_PROMPTS[data.task] ?? "";
+    let structuredContext = data.context;
+    if (data.productId) {
+      const [productResult, sourcesResult, experimentsResult, evidenceResult] = await Promise.all([
+        context.supabase.from("products").select("*").eq("id", data.productId).maybeSingle(),
+        context.supabase.from("product_sources").select("*").eq("product_id", data.productId),
+        context.supabase.from("experiments").select("*").eq("product_id", data.productId),
+        context.supabase.from("evidence_items").select("claim,source,status,observed_at").eq("product_id", data.productId),
+      ]);
+      structuredContext = `${data.context}\n\nSTRUCTURED CONTEXT (records only; missing values remain unknown):\n${JSON.stringify({ product: productResult.data, sources: sourcesResult.data, experiments: experimentsResult.data, evidence: evidenceResult.data })}`;
+    }
+    const system = `${TASK_PROMPTS[data.task] ?? ""} Treat AI output as interpretation, never as evidence. Cite only the supplied structured records and explicitly list unknowns.`;
 
     const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -54,7 +65,7 @@ export const runAiTask = createServerFn({ method: "POST" })
         model,
         messages: [
           { role: "system", content: system },
-          { role: "user", content: data.context },
+          { role: "user", content: structuredContext },
         ],
       }),
     });
@@ -73,7 +84,7 @@ export const runAiTask = createServerFn({ method: "POST" })
       model,
       task: data.task,
       prompt: system,
-      input: { context: data.context },
+      input: { context: structuredContext, product_id: data.productId ?? null },
       output,
       confidence: "UNVERIFIED",
       created_by: context.userId,

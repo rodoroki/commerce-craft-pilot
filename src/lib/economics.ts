@@ -54,7 +54,7 @@ export function computeEconomics(input: EconomicsInput): EconomicsResult {
   const complete = price !== null && deductions.every((d) => d !== null);
 
   const contributionBefore = complete
-    ? price! - deductions.reduce<number>((acc, d) => acc + (d as number), 0)
+    ? (price ?? 0) - deductions.reduce<number>((acc, d) => acc + (d as number), 0)
     : null;
   const contributionAfter =
     contributionBefore !== null && cac !== null ? contributionBefore - cac : null;

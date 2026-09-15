@@ -15,6 +15,13 @@
       "when": 1789470723237,
       "tag": "0001_phase2_6_intelligence",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1789491285166,
+      "tag": "0002_intelligence_core_v2",
+      "breakpoints": true
     }
   ]
 }

@@ -7,7 +7,7 @@ import { PageHeader } from "@/components/app-shell";
 import { Badge, Button, Card, DataFlag, Field, SectionTitle } from "@/components/ui/kit";
 import { Select, Textarea } from "@/components/ui/form";
 import { useI18n } from "@/lib/i18n";
-import { aiRunsQuery, type AiRun } from "@/lib/queries";
+import { aiRunsQuery, productsQuery, type AiRun } from "@/lib/queries";
 import { AI_TASKS, runAiTask } from "@/lib/ai.functions";
 
 export const Route = createFileRoute("/_authenticated/ai")({
@@ -37,9 +37,11 @@ function AiPage() {
   const { t } = useI18n();
   const qc = useQueryClient();
   const { data } = useQuery(aiRunsQuery);
+  const { data: products } = useQuery(productsQuery);
   const run = useServerFn(runAiTask);
   const [task, setTask] = useState<(typeof AI_TASKS)[number]>("PRODUCT_ANALYSIS");
   const [context, setContext] = useState("");
+  const [productId, setProductId] = useState("");
   const [output, setOutput] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -53,7 +55,7 @@ function AiPage() {
     setBusy(true);
     setOutput(null);
     try {
-      const res = await run({ data: { task, context: context.trim() } });
+      const res = await run({ data: { task, context: context.trim(), productId: productId || undefined } });
       if (!res.ok) {
         toast.error(ERRORS[res.error] ?? "The AI request failed.");
         return;
@@ -91,6 +93,12 @@ function AiPage() {
             onChange={(e) => setContext(e.target.value)}
             placeholder="Paste the product, supplier or experiment facts the AI should reason about."
           />
+        </Field>
+        <Field label="Product context">
+          <Select value={productId} onChange={(e) => setProductId(e.target.value)}>
+            <option value="">No linked product</option>
+            {(products ?? []).map((product) => <option key={product.id} value={product.id}>{product.name}</option>)}
+          </Select>
         </Field>
         <Button onClick={submit} disabled={busy}>
           {busy ? t("state.loading") : "Run"}

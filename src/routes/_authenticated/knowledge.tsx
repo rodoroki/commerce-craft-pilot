@@ -14,6 +14,7 @@ import {
   useSaveRecord,
   type KnowledgeEntry,
 } from "@/lib/queries";
+import { learningStatus } from "@/lib/intelligence";
 
 export const Route = createFileRoute("/_authenticated/knowledge")({
   head: () => ({
@@ -39,6 +40,10 @@ const empty = {
   category: "",
   insight: "",
   evidence: "",
+  observation: "",
+  signal: "",
+  test_result: "",
+  next_action: "",
   observations_count: null as number | null,
   status: "HYPOTHESIS",
   brand_id: "",
@@ -62,10 +67,7 @@ function KnowledgePage() {
       return;
     }
     const observations = form.observations_count;
-    const status =
-      form.status === "CONSOLIDATED" && (observations ?? 0) < MIN_OBSERVATIONS
-        ? "HYPOTHESIS"
-        : form.status;
+    const status = learningStatus(form.status, observations ?? 0);
     if (status !== form.status) {
       toast.message(
         `Kept as a hypothesis: consolidating a rule needs at least ${MIN_OBSERVATIONS} observations.`,
@@ -78,6 +80,11 @@ function KnowledgePage() {
           category: form.category || null,
           insight: form.insight.trim(),
           evidence: form.evidence || null,
+          observation: form.observation || null,
+          signal: form.signal || null,
+          test_result: form.test_result || null,
+          next_action: form.next_action || null,
+          confidence: status === "CONSOLIDATED" ? "HIGH" : status === "SUPPORTED" ? "MEDIUM" : "LOW",
           observations_count: observations,
           status,
           brand_id: form.brand_id || null,
@@ -123,6 +130,9 @@ function KnowledgePage() {
                 </div>
               </div>
               <p className="mt-4 text-sm">{k.insight}</p>
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                {[["Observation", k.observation], ["Signal", k.signal], ["Test result", k.test_result], ["Next action", k.next_action]].map(([label, value]) => <div key={label}><div className="label-xs">{label}</div><p className="mt-1 text-sm text-muted-foreground">{value ?? "—"}</p></div>)}
+              </div>
               <div className="mt-4 text-sm">
                 <div className="label-xs">Evidence</div>
                 <div className="mt-1">
@@ -216,6 +226,12 @@ function KnowledgePage() {
             onChange={(e) => setForm({ ...form, insight: e.target.value })}
           />
         </Field>
+        <Grid2>
+          <Field label="Observation"><Textarea value={form.observation} onChange={(e) => setForm({ ...form, observation: e.target.value })} /></Field>
+          <Field label="Signal"><Textarea value={form.signal} onChange={(e) => setForm({ ...form, signal: e.target.value })} /></Field>
+          <Field label="Test result"><Textarea value={form.test_result} onChange={(e) => setForm({ ...form, test_result: e.target.value })} /></Field>
+          <Field label="Next action"><Textarea value={form.next_action} onChange={(e) => setForm({ ...form, next_action: e.target.value })} /></Field>
+        </Grid2>
         <Field label="Evidence">
           <Textarea
             value={form.evidence}

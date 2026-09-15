@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/app-shell";
-import { Badge, Button, Card, DataFlag, Field, Input, SectionTitle } from "@/components/ui/kit";
+import { Badge, Button, Card, ConfidenceBadge, DataFlag, Field, Input, ProvenanceLine, SectionTitle } from "@/components/ui/kit";
 import { Grid2, Modal, NumberInput, Select, Textarea } from "@/components/ui/form";
 import { useI18n } from "@/lib/i18n";
 import {
@@ -16,6 +16,7 @@ import {
   type Supplier,
 } from "@/lib/queries";
 import { computeEconomics, formatMoney } from "@/lib/economics";
+import { compareSources, interpretOpportunity, nextBestAction } from "@/lib/intelligence";
 
 export const Route = createFileRoute("/_authenticated/products/$slug")({
   head: () => ({
@@ -93,18 +94,21 @@ function ProductDetail() {
   const { data: suppliers } = useQuery(suppliersQuery);
   const saveProduct = useSaveRecord("products");
   const saveSource = useSaveRecord("product_sources");
+  const saveEvidence = useSaveRecord("evidence_items");
 
   const [econOpen, setEconOpen] = useState(false);
   const [scoreOpen, setScoreOpen] = useState(false);
   const [sourceOpen, setSourceOpen] = useState(false);
+  const [evidenceOpen, setEvidenceOpen] = useState(false);
   const [econForm, setEconForm] = useState<Record<string, number | null>>({});
   const [scoreForm, setScoreForm] = useState<Record<string, number | null>>({});
   const [sourceForm, setSourceForm] = useState(emptySource);
+  const [evidenceForm, setEvidenceForm] = useState({ claim: "", source: "", source_url: "", status: "UNKNOWN" });
 
   if (isLoading) return <p className="text-sm text-muted-foreground">{t("state.loading")}</p>;
   if (!data) return <p className="text-sm text-muted-foreground">Product not found.</p>;
 
-  const { product, sources, history, creatives, hooks, landings, experiments } = data;
+  const { product, sources, history, creatives, hooks, landings, experiments, evidence } = data;
   const currency = product.currency ?? "USD";
   const econ = computeEconomics({
     suggested_price: num(product.suggested_price),
@@ -128,6 +132,9 @@ function ProductDetail() {
     economicsComplete: econ.complete,
     contributionBefore: econ.contributionBefore,
   });
+  const opportunity = interpretOpportunity(product, sources, econ);
+  const action = nextBestAction({ opportunity, economics: econ, sources, experiments });
+  const sourceWar = compareSources(sources);
 
   const breakdown = (product.score_breakdown ?? {}) as Record<string, number | undefined>;
 
@@ -233,6 +240,28 @@ function ProductDetail() {
       },
     );
 
+  const submitEvidence = () => {
+    if (!evidenceForm.claim.trim() || !evidenceForm.source.trim()) {
+      toast.error("A claim and source are required.");
+      return;
+    }
+    saveEvidence.mutate({ values: {
+      product_id: product.id,
+      claim: evidenceForm.claim.trim(),
+      source: evidenceForm.source.trim(),
+      source_url: evidenceForm.source_url || null,
+      status: evidenceForm.status,
+      observed_at: new Date().toISOString(),
+    } }, {
+      onSuccess: () => {
+        setEvidenceOpen(false);
+        setEvidenceForm({ claim: "", source: "", source_url: "", status: "UNKNOWN" });
+        toast.success("Evidence recorded.");
+      },
+      onError: (error) => toast.error(error.message),
+    });
+  };
+
   return (
     <div className="space-y-14">
       <PageHeader
@@ -254,6 +283,53 @@ function ProductDetail() {
         </Link>
         {product.brands ? ` · ${product.brands.name}™` : ""}
       </div>
+
+      <section className="space-y-4">
+        <SectionTitle aside={<div className="flex items-center gap-2"><ConfidenceBadge level={opportunity.confidence} /><Button size="sm" variant="outline" onClick={() => setEvidenceOpen(true)}>Add evidence</Button></div>}>
+          {t("intelligence.opportunity")}
+        </SectionTitle>
+        <Card className="overflow-hidden">
+          <div className="border-b border-border p-5">
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge tone={opportunity.status === "PROMISING" ? "success" : "accent"}>{opportunity.status.replace(/_/g, " ")}</Badge>
+              {opportunity.score === null ? <DataFlag kind="UNKNOWN">SCORE UNKNOWN</DataFlag> : <span className="numeral text-sm">{opportunity.score}/100</span>}
+            </div>
+            <p className="mt-3 text-sm text-muted-foreground">{opportunity.summary}</p>
+          </div>
+          <div className="grid gap-px bg-border md:grid-cols-3">
+            {([
+              [t("intelligence.why"), opportunity.why],
+              [t("intelligence.risks"), opportunity.risks],
+              [t("intelligence.unknowns"), opportunity.unknowns],
+            ] as const).map(([label, items]) => (
+              <div key={label} className="bg-card p-5">
+                <div className="label-xs">{label}</div>
+                {items.length === 0 ? <div className="mt-3"><DataFlag kind="NO_DATA" /></div> : (
+                  <ul className="mt-3 space-y-4 text-sm">
+                    {items.map((item) => <li key={`${item.claim}-${item.source}`}>{item.claim}<ProvenanceLine source={item.source} timestamp={item.timestamp} status={item.status} /></li>)}
+                  </ul>
+                )}
+              </div>
+            ))}
+          </div>
+          <div className="border-t border-border p-5">
+            <div className="label-xs">{t("intelligence.evidence")} · {evidence.length} recorded</div>
+            {evidence.length === 0 ? <div className="mt-3"><DataFlag kind="NO_DATA">NO RECORDED EVIDENCE</DataFlag></div> : (
+              <div className="mt-3 space-y-3">{evidence.slice(0, 5).map((item) => <div key={item.id} className="text-sm">{item.claim}<ProvenanceLine source={item.source} timestamp={item.observed_at ?? item.created_at} status={item.status} /></div>)}</div>
+            )}
+          </div>
+        </Card>
+      </section>
+
+      <section className="space-y-4">
+        <SectionTitle>{t("intelligence.nextAction")}</SectionTitle>
+        <Card className="p-5">
+          <div className="display text-2xl">{action.action}</div>
+          <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+            {[["Why", action.why], ["Evidence", action.evidence], ["Unknown", action.unknown], ["Risk", action.risk], ["Expected outcome", action.expectedOutcome]].map(([label, value]) => <div key={label}><div className="label-xs">{label}</div><p className="mt-2 text-sm text-muted-foreground">{value}</p></div>)}
+          </div>
+        </Card>
+      </section>
 
       <section className="space-y-4">
         <SectionTitle
@@ -417,8 +493,7 @@ function ProductDetail() {
           </table>
         </div>
         <p className="text-xs text-muted-foreground">
-          Rankings appear only for suppliers with confirmed figures. No supplier is auto-selected
-          without data.
+          {sourceWar.rationale} Rankings only use comparable recorded figures.
         </p>
       </section>
 
@@ -506,6 +581,20 @@ function ProductDetail() {
           ))}
         </div>
       </section>
+
+      <Modal
+        open={evidenceOpen}
+        onClose={() => setEvidenceOpen(false)}
+        title="Record evidence"
+        footer={<><Button variant="outline" onClick={() => setEvidenceOpen(false)}>{t("cancel")}</Button><Button onClick={submitEvidence} disabled={saveEvidence.isPending}>{t("save")}</Button></>}
+      >
+        <Field label="Claim"><Textarea value={evidenceForm.claim} onChange={(e) => setEvidenceForm({ ...evidenceForm, claim: e.target.value })} /></Field>
+        <Grid2>
+          <Field label="Source"><Input value={evidenceForm.source} onChange={(e) => setEvidenceForm({ ...evidenceForm, source: e.target.value })} placeholder="Supplier quote, test, document…" /></Field>
+          <Field label="Source URL"><Input value={evidenceForm.source_url} onChange={(e) => setEvidenceForm({ ...evidenceForm, source_url: e.target.value })} /></Field>
+          <Field label="Status"><Select value={evidenceForm.status} onChange={(e) => setEvidenceForm({ ...evidenceForm, status: e.target.value })}>{["VERIFIED", "OBSERVED", "DECLARED_BY_SUPPLIER", "HYPOTHESIS", "ESTIMATE", "AI_GENERATED", "UNKNOWN", "INSUFFICIENT_DATA"].map((status) => <option key={status} value={status}>{status.replace(/_/g, " ")}</option>)}</Select></Field>
+        </Grid2>
+      </Modal>
 
       <Modal
         open={econOpen}
