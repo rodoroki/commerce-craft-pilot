@@ -1,0 +1,189 @@
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import type { ReactNode } from "react";
+
+export type Locale = "en-US" | "pt-BR" | "es-ES";
+
+type Dict = Record<string, string>;
+
+const en: Dict = {
+  "app.name": "Commerce Intelligence Engine",
+  "app.short": "CIE",
+  "nav.command": "Command Center",
+  "nav.products": "Products",
+  "nav.brands": "Brands",
+  "nav.suppliers": "Suppliers",
+  "nav.integrations": "Integrations",
+  "nav.settings": "Settings",
+  "nav.signout": "Sign out",
+  "state.noData": "NO DATA",
+  "state.unknown": "UNKNOWN",
+  "state.estimated": "ESTIMATED",
+  "state.notConfigured": "NOT CONFIGURED",
+  "state.connected": "CONNECTED",
+  "state.error": "ERROR",
+  "state.loading": "Loading…",
+  "command.title": "Command Center",
+  "command.business": "Business",
+  "command.pipeline": "Pipeline",
+  "command.attention": "Attention",
+  "command.noBusinessData":
+    "No commerce integration is connected, so there is no revenue data to report.",
+  "command.attentionEmpty": "Nothing requires a decision right now.",
+  "metric.revenue": "Revenue",
+  "metric.orders": "Orders",
+  "metric.aov": "AOV",
+  "metric.cac": "CAC",
+  "metric.roas": "ROAS",
+  "metric.contributionMargin": "Contribution margin",
+  "metric.refundRate": "Refund rate",
+  "products.title": "Product Lab",
+  "products.subtitle": "Opportunities, lifecycle, scoring and sourcing.",
+  "products.new": "New product",
+  "products.empty": "No products yet.",
+  "product.stage": "Stage",
+  "product.score": "Product score",
+  "product.economics": "Unit economics",
+  "product.sources": "Source War",
+  "product.history": "Stage history",
+  "product.decision": "Decision",
+  "product.creative": "Creative hypotheses",
+  "product.landing": "Landing hypothesis",
+  "product.experiments": "Experiments",
+  "econ.sellingPrice": "Selling price",
+  "econ.productCost": "Product cost",
+  "econ.shipping": "Shipping",
+  "econ.paymentFees": "Payment fees",
+  "econ.platformFees": "Platform fees",
+  "econ.fulfillment": "Fulfillment",
+  "econ.refundAllowance": "Refund allowance",
+  "econ.contributionBefore": "Contribution before advertising",
+  "econ.cac": "CAC",
+  "econ.contributionAfter": "Contribution after advertising",
+  "econ.incomplete": "Economics incomplete — missing inputs are shown as UNKNOWN.",
+  "brands.title": "Brand Lab",
+  "brands.subtitle": "Multi-brand architecture. One brand live.",
+  "suppliers.title": "Supplier Lab",
+  "suppliers.subtitle": "Sources, terms and reliability.",
+  "integrations.title": "Integrations",
+  "integrations.subtitle": "Nothing is simulated. Status reflects real configuration.",
+  "settings.title": "Settings",
+  "settings.language": "Language",
+  "settings.currency": "Display currency",
+  "settings.theme": "Theme",
+  "auth.title": "Sign in",
+  "auth.subtitle": "Private operating system. Access is restricted.",
+  "auth.email": "Email",
+  "auth.password": "Password",
+  "auth.signin": "Sign in",
+  "auth.signup": "Create account",
+  "auth.toggleToSignup": "No account? Create one",
+  "auth.toggleToSignin": "Already have an account? Sign in",
+  "auth.google": "Continue with Google",
+  "save": "Save",
+  "cancel": "Cancel",
+  "phase.note": "Phase 1 — foundation. Later phases are not built yet.",
+};
+
+const pt: Dict = {
+  ...en,
+  "nav.command": "Centro de Comando",
+  "nav.products": "Produtos",
+  "nav.brands": "Marcas",
+  "nav.suppliers": "Fornecedores",
+  "nav.integrations": "Integrações",
+  "nav.settings": "Configurações",
+  "nav.signout": "Sair",
+  "state.noData": "SEM DADOS",
+  "state.unknown": "DESCONHECIDO",
+  "state.estimated": "ESTIMADO",
+  "state.notConfigured": "NÃO CONFIGURADO",
+  "state.connected": "CONECTADO",
+  "state.error": "ERRO",
+  "state.loading": "Carregando…",
+  "command.title": "Centro de Comando",
+  "command.business": "Negócio",
+  "command.pipeline": "Pipeline",
+  "command.attention": "Atenção",
+  "command.noBusinessData":
+    "Nenhuma integração de commerce conectada, portanto não há dados de receita.",
+  "command.attentionEmpty": "Nada exige decisão no momento.",
+  "metric.revenue": "Receita",
+  "metric.orders": "Pedidos",
+  "metric.contributionMargin": "Margem de contribuição",
+  "metric.refundRate": "Taxa de reembolso",
+  "products.title": "Product Lab",
+  "products.subtitle": "Oportunidades, ciclo de vida, score e sourcing.",
+  "products.new": "Novo produto",
+  "products.empty": "Nenhum produto ainda.",
+  "product.stage": "Estágio",
+  "product.score": "Score do produto",
+  "product.economics": "Economia unitária",
+  "product.history": "Histórico de estágios",
+  "product.decision": "Decisão",
+  "product.creative": "Hipóteses criativas",
+  "product.landing": "Hipótese de landing",
+  "product.experiments": "Experimentos",
+  "econ.sellingPrice": "Preço de venda",
+  "econ.productCost": "Custo do produto",
+  "econ.shipping": "Frete",
+  "econ.paymentFees": "Taxas de pagamento",
+  "econ.platformFees": "Taxas de plataforma",
+  "econ.fulfillment": "Fulfillment",
+  "econ.refundAllowance": "Provisão de reembolso",
+  "econ.contributionBefore": "Contribuição antes da mídia",
+  "econ.contributionAfter": "Contribuição depois da mídia",
+  "econ.incomplete": "Economia incompleta — dados ausentes aparecem como DESCONHECIDO.",
+  "brands.title": "Brand Lab",
+  "brands.subtitle": "Arquitetura multi-marca. Uma marca ativa.",
+  "suppliers.title": "Supplier Lab",
+  "suppliers.subtitle": "Fontes, condições e confiabilidade.",
+  "integrations.title": "Integrações",
+  "integrations.subtitle": "Nada é simulado. O status reflete a configuração real.",
+  "settings.title": "Configurações",
+  "settings.language": "Idioma",
+  "settings.currency": "Moeda de exibição",
+  "settings.theme": "Tema",
+  "auth.title": "Entrar",
+  "auth.subtitle": "Sistema operacional privado. Acesso restrito.",
+  "auth.email": "E-mail",
+  "auth.password": "Senha",
+  "auth.signin": "Entrar",
+  "auth.signup": "Criar conta",
+  "auth.toggleToSignup": "Sem conta? Criar uma",
+  "auth.toggleToSignin": "Já tem conta? Entrar",
+  "auth.google": "Continuar com Google",
+  "save": "Salvar",
+  "cancel": "Cancelar",
+  "phase.note": "Fase 1 — fundação. Fases seguintes ainda não construídas.",
+};
+
+const dictionaries: Record<Locale, Dict> = { "en-US": en, "pt-BR": pt, "es-ES": en };
+
+type I18nValue = { locale: Locale; setLocale: (l: Locale) => void; t: (key: string) => string };
+
+const I18nContext = createContext<I18nValue | null>(null);
+
+export function I18nProvider({ children }: { children: ReactNode }) {
+  const [locale, setLocaleState] = useState<Locale>("en-US");
+
+  useEffect(() => {
+    const stored = window.localStorage.getItem("cie.locale") as Locale | null;
+    if (stored && stored in dictionaries) setLocaleState(stored);
+  }, []);
+
+  const setLocale = useCallback((l: Locale) => {
+    setLocaleState(l);
+    window.localStorage.setItem("cie.locale", l);
+  }, []);
+
+  const t = useCallback((key: string) => dictionaries[locale][key] ?? key, [locale]);
+
+  const value = useMemo(() => ({ locale, setLocale, t }), [locale, setLocale, t]);
+  return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
+}
+
+export function useI18n() {
+  const ctx = useContext(I18nContext);
+  if (!ctx) throw new Error("useI18n must be used inside I18nProvider");
+  return ctx;
+}
