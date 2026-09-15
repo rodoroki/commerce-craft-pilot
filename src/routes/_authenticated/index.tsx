@@ -22,24 +22,30 @@ export const Route = createFileRoute("/_authenticated/")({
   component: CommandCenter,
 });
 
-const BUSINESS = [
-  "metric.revenue",
-  "metric.orders",
-  "metric.aov",
-  "metric.cac",
-  "metric.roas",
-  "metric.contributionMargin",
-  "metric.refundRate",
-];
-
 function CommandCenter() {
   const { t } = useI18n();
   const products = useQuery(productsQuery);
   const integrations = useQuery(integrationsQuery);
+  const metrics = useQuery(allMetricsQuery);
+  const experiments = useQuery(experimentsQuery);
+  const suppliers = useQuery(suppliersQuery);
 
   const commerceConnected = (integrations.data ?? []).some(
     (i) => i.category === "COMMERCE" && i.status === "CONNECTED",
   );
+
+  const tot = totals(metrics.data ?? []);
+  const der = derive(tot);
+
+  const business: [string, string | null][] = [
+    [t("metric.revenue"), fmtNum(tot.revenue, 2)],
+    [t("metric.orders"), fmtNum(tot.purchases)],
+    [t("metric.aov"), fmtNum(der.aov, 2)],
+    [t("metric.cac"), fmtNum(der.cac, 2)],
+    [t("metric.roas"), fmtNum(der.roas, 2)],
+    [t("metric.contributionMargin"), null],
+    [t("metric.refundRate"), fmtPct(der.refundRate)],
+  ];
 
   const counts = PRODUCT_STAGES.map((stage) => ({
     stage,
@@ -47,6 +53,10 @@ function CommandCenter() {
   }));
 
   const attention = (products.data ?? []).filter((p) => p.score === null || p.stage === "SOURCING");
+  const thinExperiments = (experiments.data ?? []).filter(
+    (e) => e.status === "RUNNING" && !e.decision,
+  );
+  const unratedSuppliers = (suppliers.data ?? []).filter((s) => s.supplier_score === null);
 
   return (
     <div className="space-y-14">
