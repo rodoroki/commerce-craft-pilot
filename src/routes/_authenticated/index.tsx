@@ -5,7 +5,7 @@ import { Badge, Card, DataFlag, SectionTitle } from "@/components/ui/kit";
 import { useI18n } from "@/lib/i18n";
 import { integrationsQuery, productsQuery, PRODUCT_STAGES } from "@/lib/queries";
 
-export const Route = createFileRoute("/_authenticated/command")({
+export const Route = createFileRoute("/_authenticated/")({
   head: () => ({
     meta: [
       { title: "Command Center — Commerce Intelligence Engine" },
