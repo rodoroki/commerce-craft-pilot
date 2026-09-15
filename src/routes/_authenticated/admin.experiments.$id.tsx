@@ -11,7 +11,7 @@ import { decide, derive, fmtNum, fmtPct, totals } from "@/lib/analytics";
 import { computeEconomics } from "@/lib/economics";
 import { formalDecision } from "@/lib/intelligence";
 
-export const Route = createFileRoute("/_authenticated/experiments/$id")({
+export const Route = createFileRoute("/_authenticated/admin/experiments/$id")({
   head: () => ({
     meta: [
       { title: "Experiment detail — Commerce Intelligence Engine" },
@@ -239,7 +239,7 @@ function ExperimentDetail() {
         )}
       </section>
 
-      <Link to="/experiments" className="text-sm text-muted-foreground hover:text-foreground">
+      <Link to="/admin/experiments" className="text-sm text-muted-foreground hover:text-foreground">
         ← All experiments
       </Link>
 

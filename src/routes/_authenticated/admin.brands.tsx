@@ -8,7 +8,7 @@ import { Grid2, Modal, Textarea } from "@/components/ui/form";
 import { useI18n } from "@/lib/i18n";
 import { brandsQuery, slugify, useSaveRecord, type Brand } from "@/lib/queries";
 
-export const Route = createFileRoute("/_authenticated/brands")({
+export const Route = createFileRoute("/_authenticated/admin/brands")({
   head: () => ({
     meta: [
       { title: "Brand Lab — Commerce Intelligence Engine" },

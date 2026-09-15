@@ -16,7 +16,7 @@ import {
 } from "@/lib/queries";
 import { derive, fmtNum, fmtPct, totals } from "@/lib/analytics";
 
-export const Route = createFileRoute("/_authenticated/")({
+export const Route = createFileRoute("/_authenticated/admin/")({
   head: () => ({
     meta: [
       { title: "Command Center — Commerce Intelligence Engine" },
@@ -133,7 +133,7 @@ function CommandCenter() {
         ) : (
           <div className="space-y-2">
             {attention.map((p) => (
-              <Link key={p.id} to="/products/$slug" params={{ slug: p.slug }} className="block">
+              <Link key={p.id} to="/admin/products/$slug" params={{ slug: p.slug }} className="block">
                 <Card className="flex items-center justify-between gap-4 p-4 transition-colors hover:bg-surface">
                   <div>
                     <div className="font-medium">{p.name}</div>
@@ -150,7 +150,7 @@ function CommandCenter() {
           </div>
         )}
         <div className="grid gap-3 sm:grid-cols-2">
-          <Link to="/experiments" className="block">
+          <Link to="/admin/experiments" className="block">
             <Card className="p-4 transition-colors hover:bg-surface">
               <div className="label-xs">Experiments without a decision</div>
               <div className="numeral mt-2 text-2xl">{thinExperiments.length}</div>
@@ -159,7 +159,7 @@ function CommandCenter() {
               </p>
             </Card>
           </Link>
-          <Link to="/suppliers" className="block">
+          <Link to="/admin/suppliers" className="block">
             <Card className="p-4 transition-colors hover:bg-surface">
               <div className="label-xs">Suppliers without a reliability score</div>
               <div className="numeral mt-2 text-2xl">{unratedSuppliers.length}</div>

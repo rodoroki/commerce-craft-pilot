@@ -17,7 +17,7 @@ import {
   type LandingPage,
 } from "@/lib/queries";
 
-export const Route = createFileRoute("/_authenticated/landing")({
+export const Route = createFileRoute("/_authenticated/admin/landing")({
   head: () => ({
     meta: [
       { title: "Landing Pages — Commerce Intelligence Engine" },

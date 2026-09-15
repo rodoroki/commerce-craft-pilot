@@ -10,7 +10,7 @@ import { useI18n } from "@/lib/i18n";
 import { aiRunsQuery, productsQuery, type AiRun } from "@/lib/queries";
 import { AI_TASKS, runAiTask } from "@/lib/ai.functions";
 
-export const Route = createFileRoute("/_authenticated/ai")({
+export const Route = createFileRoute("/_authenticated/admin/ai")({
   head: () => ({
     meta: [
       { title: "AI Layer — Commerce Intelligence Engine" },

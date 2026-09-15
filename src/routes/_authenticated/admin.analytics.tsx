@@ -6,7 +6,7 @@ import { useI18n } from "@/lib/i18n";
 import { allMetricsQuery, funnelEventsQuery, integrationsQuery } from "@/lib/queries";
 import { derive, fmtNum, fmtPct, totals } from "@/lib/analytics";
 
-export const Route = createFileRoute("/_authenticated/analytics")({
+export const Route = createFileRoute("/_authenticated/admin/analytics")({
   head: () => ({
     meta: [
       { title: "Analytics — Commerce Intelligence Engine" },
