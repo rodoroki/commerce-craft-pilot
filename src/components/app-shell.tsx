@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/kit";
 
 const NAV = [
   { to: "/", key: "nav.command" },
+  { to: "/flow", key: "nav.flow" },
   { to: "/products", key: "nav.products" },
   { to: "/brands", key: "nav.brands" },
   { to: "/suppliers", key: "nav.suppliers" },
