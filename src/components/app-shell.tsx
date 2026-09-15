@@ -63,6 +63,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               key={item.to}
               to={item.to}
               onClick={() => setOpen(false)}
+              activeOptions={{ exact: item.to === "/" }}
               className="rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-background hover:text-foreground"
               activeProps={{ className: "bg-background text-foreground font-medium" }}
             >
