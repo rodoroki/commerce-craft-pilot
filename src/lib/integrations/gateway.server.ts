@@ -208,7 +208,10 @@ export async function writeSecretRow(
 ) {
   await supabaseAdmin
     .from("integration_secrets")
-    .upsert({ provider, ...values, extra: values.extra ?? {} }, { onConflict: "provider" });
+    .upsert(
+      { provider, ...values, extra: JSON.parse(JSON.stringify(values.extra ?? {})) },
+      { onConflict: "provider" },
+    );
 }
 
 /** Constant-time comparison for signature validation. */
