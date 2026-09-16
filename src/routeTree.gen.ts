@@ -10,14 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
-import { Route as StoreRouteRouteImport } from './routes/_store/route'
 import { Route as AuthRouteImport } from './routes/auth'
-import { Route as StoreIndexRouteImport } from './routes/_store/index'
-import { Route as StoreAboutRouteImport } from './routes/_store/about'
-import { Route as StoreCartRouteImport } from './routes/_store/cart'
-import { Route as StoreFaqRouteImport } from './routes/_store/faq'
-import { Route as StoreHowItWorksRouteImport } from './routes/_store/how-it-works'
-import { Route as StorePoliciesRouteImport } from './routes/_store/policies'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedAdminAiRouteImport } from './routes/_authenticated/admin.ai'
 import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authenticated/admin.analytics'
@@ -29,7 +22,6 @@ import { Route as AuthenticatedAdminKnowledgeRouteImport } from './routes/_authe
 import { Route as AuthenticatedAdminLandingRouteImport } from './routes/_authenticated/admin.landing'
 import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin.settings'
 import { Route as AuthenticatedAdminSuppliersRouteImport } from './routes/_authenticated/admin.suppliers'
-import { Route as StoreProductSlugRouteImport } from './routes/_store/product.$slug'
 import { Route as ApiPublicTrackRouteImport } from './routes/api/public/track'
 import { Route as AuthenticatedAdminExperimentsIndexRouteImport } from './routes/_authenticated/admin.experiments.index'
 import { Route as AuthenticatedAdminExperimentsIdRouteImport } from './routes/_authenticated/admin.experiments.$id'
@@ -40,44 +32,10 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
-const StoreRouteRoute = StoreRouteRouteImport.update({
-  id: '/_store',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
   getParentRoute: () => rootRouteImport,
-} as any)
-const StoreIndexRoute = StoreIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => StoreRouteRoute,
-} as any)
-const StoreAboutRoute = StoreAboutRouteImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => StoreRouteRoute,
-} as any)
-const StoreCartRoute = StoreCartRouteImport.update({
-  id: '/cart',
-  path: '/cart',
-  getParentRoute: () => StoreRouteRoute,
-} as any)
-const StoreFaqRoute = StoreFaqRouteImport.update({
-  id: '/faq',
-  path: '/faq',
-  getParentRoute: () => StoreRouteRoute,
-} as any)
-const StoreHowItWorksRoute = StoreHowItWorksRouteImport.update({
-  id: '/how-it-works',
-  path: '/how-it-works',
-  getParentRoute: () => StoreRouteRoute,
-} as any)
-const StorePoliciesRoute = StorePoliciesRouteImport.update({
-  id: '/policies',
-  path: '/policies',
-  getParentRoute: () => StoreRouteRoute,
 } as any)
 const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   id: '/admin/',
@@ -142,11 +100,6 @@ const AuthenticatedAdminSuppliersRoute =
     path: '/admin/suppliers',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const StoreProductSlugRoute = StoreProductSlugRouteImport.update({
-  id: '/product/$slug',
-  path: '/product/$slug',
-  getParentRoute: () => StoreRouteRoute,
-} as any)
 const ApiPublicTrackRoute = ApiPublicTrackRouteImport.update({
   id: '/api/public/track',
   path: '/api/public/track',
@@ -178,13 +131,8 @@ const AuthenticatedAdminProductsSlugRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof StoreIndexRoute
+  '/': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
-  '/about': typeof StoreAboutRoute
-  '/cart': typeof StoreCartRoute
-  '/faq': typeof StoreFaqRoute
-  '/how-it-works': typeof StoreHowItWorksRoute
-  '/policies': typeof StorePoliciesRoute
   '/admin/ai': typeof AuthenticatedAdminAiRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/admin/brands': typeof AuthenticatedAdminBrandsRoute
@@ -195,7 +143,6 @@ export interface FileRoutesByFullPath {
   '/admin/landing': typeof AuthenticatedAdminLandingRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/admin/suppliers': typeof AuthenticatedAdminSuppliersRoute
-  '/product/$slug': typeof StoreProductSlugRoute
   '/api/public/track': typeof ApiPublicTrackRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/admin/experiments/$id': typeof AuthenticatedAdminExperimentsIdRoute
@@ -204,13 +151,8 @@ export interface FileRoutesByFullPath {
   '/admin/products/': typeof AuthenticatedAdminProductsIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof StoreIndexRoute
+  '/': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
-  '/about': typeof StoreAboutRoute
-  '/cart': typeof StoreCartRoute
-  '/faq': typeof StoreFaqRoute
-  '/how-it-works': typeof StoreHowItWorksRoute
-  '/policies': typeof StorePoliciesRoute
   '/admin/ai': typeof AuthenticatedAdminAiRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/admin/brands': typeof AuthenticatedAdminBrandsRoute
@@ -221,7 +163,6 @@ export interface FileRoutesByTo {
   '/admin/landing': typeof AuthenticatedAdminLandingRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/admin/suppliers': typeof AuthenticatedAdminSuppliersRoute
-  '/product/$slug': typeof StoreProductSlugRoute
   '/api/public/track': typeof ApiPublicTrackRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/admin/experiments/$id': typeof AuthenticatedAdminExperimentsIdRoute
@@ -232,14 +173,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
-  '/_store': typeof StoreRouteRouteWithChildren
   '/auth': typeof AuthRoute
-  '/_store/about': typeof StoreAboutRoute
-  '/_store/cart': typeof StoreCartRoute
-  '/_store/faq': typeof StoreFaqRoute
-  '/_store/how-it-works': typeof StoreHowItWorksRoute
-  '/_store/policies': typeof StorePoliciesRoute
-  '/_store/': typeof StoreIndexRoute
   '/_authenticated/admin/ai': typeof AuthenticatedAdminAiRoute
   '/_authenticated/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/_authenticated/admin/brands': typeof AuthenticatedAdminBrandsRoute
@@ -250,7 +184,6 @@ export interface FileRoutesById {
   '/_authenticated/admin/landing': typeof AuthenticatedAdminLandingRoute
   '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/_authenticated/admin/suppliers': typeof AuthenticatedAdminSuppliersRoute
-  '/_store/product/$slug': typeof StoreProductSlugRoute
   '/api/public/track': typeof ApiPublicTrackRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/admin/experiments/$id': typeof AuthenticatedAdminExperimentsIdRoute
@@ -263,11 +196,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
-    | '/about'
-    | '/cart'
-    | '/faq'
-    | '/how-it-works'
-    | '/policies'
     | '/admin/ai'
     | '/admin/analytics'
     | '/admin/brands'
@@ -278,7 +206,6 @@ export interface FileRouteTypes {
     | '/admin/landing'
     | '/admin/settings'
     | '/admin/suppliers'
-    | '/product/$slug'
     | '/api/public/track'
     | '/admin/'
     | '/admin/experiments/$id'
@@ -289,11 +216,6 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
-    | '/about'
-    | '/cart'
-    | '/faq'
-    | '/how-it-works'
-    | '/policies'
     | '/admin/ai'
     | '/admin/analytics'
     | '/admin/brands'
@@ -304,7 +226,6 @@ export interface FileRouteTypes {
     | '/admin/landing'
     | '/admin/settings'
     | '/admin/suppliers'
-    | '/product/$slug'
     | '/api/public/track'
     | '/admin'
     | '/admin/experiments/$id'
@@ -314,14 +235,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_authenticated'
-    | '/_store'
     | '/auth'
-    | '/_store/about'
-    | '/_store/cart'
-    | '/_store/faq'
-    | '/_store/how-it-works'
-    | '/_store/policies'
-    | '/_store/'
     | '/_authenticated/admin/ai'
     | '/_authenticated/admin/analytics'
     | '/_authenticated/admin/brands'
@@ -332,7 +246,6 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/landing'
     | '/_authenticated/admin/settings'
     | '/_authenticated/admin/suppliers'
-    | '/_store/product/$slug'
     | '/api/public/track'
     | '/_authenticated/admin/'
     | '/_authenticated/admin/experiments/$id'
@@ -343,7 +256,6 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
-  StoreRouteRoute: typeof StoreRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   ApiPublicTrackRoute: typeof ApiPublicTrackRoute
 }
@@ -357,61 +269,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_store': {
-      id: '/_store'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof StoreRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/auth': {
       id: '/auth'
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/_store/': {
-      id: '/_store/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof StoreIndexRouteImport
-      parentRoute: typeof StoreRouteRoute
-    }
-    '/_store/about': {
-      id: '/_store/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof StoreAboutRouteImport
-      parentRoute: typeof StoreRouteRoute
-    }
-    '/_store/cart': {
-      id: '/_store/cart'
-      path: '/cart'
-      fullPath: '/cart'
-      preLoaderRoute: typeof StoreCartRouteImport
-      parentRoute: typeof StoreRouteRoute
-    }
-    '/_store/faq': {
-      id: '/_store/faq'
-      path: '/faq'
-      fullPath: '/faq'
-      preLoaderRoute: typeof StoreFaqRouteImport
-      parentRoute: typeof StoreRouteRoute
-    }
-    '/_store/how-it-works': {
-      id: '/_store/how-it-works'
-      path: '/how-it-works'
-      fullPath: '/how-it-works'
-      preLoaderRoute: typeof StoreHowItWorksRouteImport
-      parentRoute: typeof StoreRouteRoute
-    }
-    '/_store/policies': {
-      id: '/_store/policies'
-      path: '/policies'
-      fullPath: '/policies'
-      preLoaderRoute: typeof StorePoliciesRouteImport
-      parentRoute: typeof StoreRouteRoute
     }
     '/_authenticated/admin/': {
       id: '/_authenticated/admin/'
@@ -489,13 +352,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/suppliers'
       preLoaderRoute: typeof AuthenticatedAdminSuppliersRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_store/product/$slug': {
-      id: '/_store/product/$slug'
-      path: '/product/$slug'
-      fullPath: '/product/$slug'
-      preLoaderRoute: typeof StoreProductSlugRouteImport
-      parentRoute: typeof StoreRouteRoute
     }
     '/api/public/track': {
       id: '/api/public/track'
@@ -575,33 +431,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
-interface StoreRouteRouteChildren {
-  StoreAboutRoute: typeof StoreAboutRoute
-  StoreCartRoute: typeof StoreCartRoute
-  StoreFaqRoute: typeof StoreFaqRoute
-  StoreHowItWorksRoute: typeof StoreHowItWorksRoute
-  StorePoliciesRoute: typeof StorePoliciesRoute
-  StoreIndexRoute: typeof StoreIndexRoute
-  StoreProductSlugRoute: typeof StoreProductSlugRoute
-}
-
-const StoreRouteRouteChildren: StoreRouteRouteChildren = {
-  StoreAboutRoute: StoreAboutRoute,
-  StoreCartRoute: StoreCartRoute,
-  StoreFaqRoute: StoreFaqRoute,
-  StoreHowItWorksRoute: StoreHowItWorksRoute,
-  StorePoliciesRoute: StorePoliciesRoute,
-  StoreIndexRoute: StoreIndexRoute,
-  StoreProductSlugRoute: StoreProductSlugRoute,
-}
-
-const StoreRouteRouteWithChildren = StoreRouteRoute._addFileChildren(
-  StoreRouteRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
-  StoreRouteRoute: StoreRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   ApiPublicTrackRoute: ApiPublicTrackRoute,
 }
