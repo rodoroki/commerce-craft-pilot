@@ -571,222 +571,39 @@ export type Database = {
           },
         ]
       }
-      integration_api_logs: {
-        Row: {
-          correlation_id: string | null
-          created_at: string
-          endpoint: string
-          error_type: string | null
-          id: string
-          latency_ms: number | null
-          method: string
-          provider: string
-          status_code: number | null
-        }
-        Insert: {
-          correlation_id?: string | null
-          created_at?: string
-          endpoint: string
-          error_type?: string | null
-          id?: string
-          latency_ms?: number | null
-          method: string
-          provider: string
-          status_code?: number | null
-        }
-        Update: {
-          correlation_id?: string | null
-          created_at?: string
-          endpoint?: string
-          error_type?: string | null
-          id?: string
-          latency_ms?: number | null
-          method?: string
-          provider?: string
-          status_code?: number | null
-        }
-        Relationships: []
-      }
-      integration_events: {
-        Row: {
-          account_id: string | null
-          correlation_id: string | null
-          error: string | null
-          event_type: string
-          external_id: string | null
-          id: string
-          idempotency_key: string
-          occurred_at: string | null
-          payload: Json
-          payload_hash: string | null
-          processed_at: string | null
-          provider: string
-          raw_topic: string | null
-          received_at: string
-          retry_count: number
-          signature_valid: boolean
-          status: string
-        }
-        Insert: {
-          account_id?: string | null
-          correlation_id?: string | null
-          error?: string | null
-          event_type: string
-          external_id?: string | null
-          id?: string
-          idempotency_key: string
-          occurred_at?: string | null
-          payload?: Json
-          payload_hash?: string | null
-          processed_at?: string | null
-          provider: string
-          raw_topic?: string | null
-          received_at?: string
-          retry_count?: number
-          signature_valid?: boolean
-          status?: string
-        }
-        Update: {
-          account_id?: string | null
-          correlation_id?: string | null
-          error?: string | null
-          event_type?: string
-          external_id?: string | null
-          id?: string
-          idempotency_key?: string
-          occurred_at?: string | null
-          payload?: Json
-          payload_hash?: string | null
-          processed_at?: string | null
-          provider?: string
-          raw_topic?: string | null
-          received_at?: string
-          retry_count?: number
-          signature_valid?: boolean
-          status?: string
-        }
-        Relationships: []
-      }
-      integration_oauth_states: {
-        Row: {
-          created_at: string
-          provider: string
-          redirect_uri: string | null
-          state: string
-        }
-        Insert: {
-          created_at?: string
-          provider: string
-          redirect_uri?: string | null
-          state: string
-        }
-        Update: {
-          created_at?: string
-          provider?: string
-          redirect_uri?: string | null
-          state?: string
-        }
-        Relationships: []
-      }
-      integration_secrets: {
-        Row: {
-          access_token: string | null
-          created_at: string
-          expires_at: string | null
-          extra: Json
-          provider: string
-          refresh_token: string | null
-          token_type: string | null
-          updated_at: string
-        }
-        Insert: {
-          access_token?: string | null
-          created_at?: string
-          expires_at?: string | null
-          extra?: Json
-          provider: string
-          refresh_token?: string | null
-          token_type?: string | null
-          updated_at?: string
-        }
-        Update: {
-          access_token?: string | null
-          created_at?: string
-          expires_at?: string | null
-          extra?: Json
-          provider?: string
-          refresh_token?: string | null
-          token_type?: string | null
-          updated_at?: string
-        }
-        Relationships: []
-      }
       integrations: {
         Row: {
-          api_state: string
-          auth_state: string
           category: string
-          config: Json
-          connection_state: string
           created_at: string
           details: string | null
-          external_account_id: string | null
-          granted_scopes: string[] | null
           id: string
           key: string
           label: string
           last_checked_at: string | null
-          last_error: string | null
-          last_error_at: string | null
-          last_event_at: string | null
-          last_success_at: string | null
           status: Database["public"]["Enums"]["integration_status"]
           updated_at: string
-          webhook_state: string
         }
         Insert: {
-          api_state?: string
-          auth_state?: string
           category: string
-          config?: Json
-          connection_state?: string
           created_at?: string
           details?: string | null
-          external_account_id?: string | null
-          granted_scopes?: string[] | null
           id?: string
           key: string
           label: string
           last_checked_at?: string | null
-          last_error?: string | null
-          last_error_at?: string | null
-          last_event_at?: string | null
-          last_success_at?: string | null
           status?: Database["public"]["Enums"]["integration_status"]
           updated_at?: string
-          webhook_state?: string
         }
         Update: {
-          api_state?: string
-          auth_state?: string
           category?: string
-          config?: Json
-          connection_state?: string
           created_at?: string
           details?: string | null
-          external_account_id?: string | null
-          granted_scopes?: string[] | null
           id?: string
           key?: string
           label?: string
           last_checked_at?: string | null
-          last_error?: string | null
-          last_error_at?: string | null
-          last_event_at?: string | null
-          last_success_at?: string | null
           status?: Database["public"]["Enums"]["integration_status"]
           updated_at?: string
-          webhook_state?: string
         }
         Relationships: []
       }
@@ -1390,54 +1207,6 @@ export type Database = {
           last_status?: string | null
           updated_at?: string
           url?: string | null
-        }
-        Relationships: []
-      }
-      webhook_subscriptions: {
-        Row: {
-          created_at: string
-          endpoint_path: string
-          external_id: string | null
-          failure_count: number
-          id: string
-          last_error: string | null
-          last_processed_at: string | null
-          last_received_at: string | null
-          provider: string
-          retry_count: number
-          status: string
-          topic: string
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          endpoint_path: string
-          external_id?: string | null
-          failure_count?: number
-          id?: string
-          last_error?: string | null
-          last_processed_at?: string | null
-          last_received_at?: string | null
-          provider: string
-          retry_count?: number
-          status?: string
-          topic: string
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          endpoint_path?: string
-          external_id?: string | null
-          failure_count?: number
-          id?: string
-          last_error?: string | null
-          last_processed_at?: string | null
-          last_received_at?: string | null
-          provider?: string
-          retry_count?: number
-          status?: string
-          topic?: string
-          updated_at?: string
         }
         Relationships: []
       }
